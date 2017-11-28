@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="gvs\connection\XMLConnection.cs" />
     <Compile Include="gvs\graph\GVSDefaultVertex.cs" />
-    <Compile Include="gvs\GVSDirectedEdge.cs" />
+    <Compile Include="gvs\graph\GVSDirectedEdge.cs" />
     <Compile Include="gvs\graph\GVSGraph.cs" />
     <Compile Include="gvs\graph\GVSGraphEdge.cs" />
     <Compile Include="gvs\graph\GVSRelativeVertex.cs" />

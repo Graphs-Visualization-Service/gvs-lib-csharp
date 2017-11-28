@@ -2,6 +2,7 @@ using System;
 using System.Xml;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 using gvs_lib_csharp.gvs.connection;
 using gvs_lib_csharp.gvs.typ.node;
 using static System.Configuration.ConfigurationSettings;
@@ -58,30 +59,26 @@ namespace gvs_lib_csharp.gvs.tree
 		private const string LEFTCHILD="Leftchild";
 
 		//Datas
-		private ArrayList gvsTreeNodes;
+		private HashSet<GVSTreeNode> gvsTreeNodes;
 
 		/// <summary>
 		///  Init the tree and the connection
 		/// </summary>
 		/// <param name="pGVSTreeName"></param>
 		public GVSTreeWithRoot(string pGVSTreeName){
-			TimeSpan t = DateTime.Now.Subtract(new DateTime(1970,01,01,01,0,0,0));
-			long time = (long)(t.TotalMilliseconds);
+			var t = DateTime.Now.Subtract(new DateTime(1970,01,01,01,0,0,0));
+			var time = (long)(t.TotalMilliseconds);
 			this.gvsTreeId=time;
-			this.gvsTreeNodes= new ArrayList();
-			this.gvsTreeName=pGVSTreeName;
+			this.gvsTreeNodes= new HashSet<GVSTreeNode>();
+			this.gvsTreeName=pGVSTreeName ?? "";
 
-			if(this.gvsTreeName==null) {
-				this.gvsTreeName="";
-			}
-
-			string gvsPortFile = AppSettings[GVSPORTFILE];
-			string gvsHost =    AppSettings[GVSHOST];
-			string gvsPort =    AppSettings[GVSPORT];
+			var gvsPortFile = AppSettings[GVSPORTFILE];
+			var gvsHost =    AppSettings[GVSHOST];
+			var gvsPort =    AppSettings[GVSPORT];
 			if(gvsPortFile!=null){
 				try{
 					Console.WriteLine("Load socketinformation from " + gvsPortFile);
-					XmlTextReader reader = new XmlTextReader(gvsPortFile);
+					var reader = new XmlTextReader(gvsPortFile);
 					while(reader.Read()){
 						if(reader.IsStartElement("Port")){
 							reader.Read();
@@ -123,7 +120,7 @@ namespace gvs_lib_csharp.gvs.tree
 		///  Set the rootnode for the tree
 		/// </summary>
 		/// <param name="pGVSRootTreeNode"></param>
-		public void setRoot(GVSTreeNode pGVSRootTreeNode) {
+		public void SetRoot(GVSTreeNode pGVSRootTreeNode) {
 			this.gvsTreeRoot=pGVSRootTreeNode;
 		}
 
@@ -131,7 +128,7 @@ namespace gvs_lib_csharp.gvs.tree
 		///  Set the maxLabelLength
 		/// </summary>
 		/// <param name="pMaxLabelLength"></param>
-		public void setMaxLabelLength(int pMaxLabelLength){
+		public void SetMaxLabelLength(int pMaxLabelLength){
 			this.maxLabelLength=pMaxLabelLength;
 		}
 
@@ -140,29 +137,29 @@ namespace gvs_lib_csharp.gvs.tree
 		/// Build the tree and check for cycles. 
 		/// If the tree is ok, it will be send to the server
 		/// </summary>
-		public void display(){
+		public void Display(){
 			document = new XmlDocument();
-			XmlDeclaration dec = document.CreateXmlDeclaration("1.0",null,null);
+			var dec = document.CreateXmlDeclaration("1.0",null,null);
 			dec.Encoding=Encoding.UTF8.ToString();
 			document.AppendChild(dec);
-			XmlElement root = document.CreateElement(ROOT);
+			var root = document.CreateElement(ROOT);
 			document.AppendChild(root);
 
 			 
-			XmlElement tree = document.CreateElement(TREE);
+			var tree = document.CreateElement(TREE);
 			root.AppendChild(tree);
 			tree.SetAttribute(ATTRIBUTEID,this.gvsTreeId.ToString());
 
-			XmlElement treeLabel = document.CreateElement(LABEL);
+			var treeLabel = document.CreateElement(LABEL);
 			tree.AppendChild(treeLabel);
 			treeLabel.AppendChild(document.CreateTextNode(this.gvsTreeName));
 
 			if(this.gvsTreeRoot!=null){
-				XmlElement treeRoot= document.CreateElement(TREEROOTID); 
+				var treeRoot= document.CreateElement(TREEROOTID); 
 				tree.AppendChild(treeRoot);
 				treeRoot.AppendChild(document.CreateTextNode(this.gvsTreeRoot.GetHashCode().ToString()));
 			 
-				XmlElement nodes = document.CreateElement(NODES);
+				var nodes = document.CreateElement(NODES);
 				root.AppendChild(nodes);
 				buildNode(nodes,this.gvsTreeRoot);
  
@@ -171,7 +168,7 @@ namespace gvs_lib_csharp.gvs.tree
 				Console.WriteLine("Kein Root deklariert");
 			}
 
-			if(!checkForCycles()){
+			if(!CheckForCycles()){
 
 				document.Save(Console.Out);
 				xmlConnection.sendFile(document);
@@ -184,7 +181,7 @@ namespace gvs_lib_csharp.gvs.tree
 		/// <summary>
 		///  Disconnect from server
 		/// </summary>
-		public void disconnect(){
+		public void Disconnect(){
 			xmlConnection.disconnectFromServer();
 		}
 
@@ -192,18 +189,18 @@ namespace gvs_lib_csharp.gvs.tree
 		/// Call disconnect()
 		/// </summary>
 		~GVSTreeWithRoot() {
-			this.disconnect();
+			this.Disconnect();
 		}
 
 
-		private bool checkForCycles() {
-			bool hasCycle=false;
-			ArrayList toCheck=new ArrayList(gvsTreeNodes);
-			foreach(GVSBinaryTreeNode actualNode in toCheck){
-				int counter=0;
-				foreach(GVSBinaryTreeNode nodeToCheck in gvsTreeNodes){
-					if(nodeToCheck.getGVSLeftChild()==actualNode||
-						nodeToCheck.getGVSRigthChild()==actualNode){
+		private bool CheckForCycles() {
+			var hasCycle=false;
+			var toCheck=new HashSet<GVSTreeNode>(gvsTreeNodes);
+			foreach(var actualNode in toCheck){
+				var counter=0;
+				foreach(var nodeToCheck in gvsTreeNodes){
+					if(((GVSBinaryTreeNode)nodeToCheck).GetGvsLeftChild()==actualNode||
+						((GVSBinaryTreeNode)nodeToCheck).GetGvsRigthChild()==actualNode){
 						counter++;
 					}
 				}
@@ -220,15 +217,15 @@ namespace gvs_lib_csharp.gvs.tree
 		//***************************************XML-BUILDERS***********************************************
 		private void buildNode(XmlElement pParent, GVSTreeNode pNode){
 			gvsTreeNodes.Add(pNode);
-			Type[] interfaces=pNode.GetType().GetInterfaces();
-			foreach(Type theInterface in interfaces){
+			var interfaces=pNode.GetType().GetInterfaces();
+			foreach(var theInterface in interfaces){
 				if(theInterface.FullName==typeof(GVSBinaryTreeNode).FullName){
 					buildBinaryNode(pParent,(GVSBinaryTreeNode)pNode);
-					GVSBinaryTreeNode tmpNode=((GVSBinaryTreeNode)pNode).getGVSLeftChild();
+					var tmpNode=((GVSBinaryTreeNode)pNode).GetGvsLeftChild();
 					if(tmpNode!=null){
 						buildNode(pParent,tmpNode);	
 					}
-					tmpNode=((GVSBinaryTreeNode)pNode).getGVSRigthChild();
+					tmpNode=((GVSBinaryTreeNode)pNode).GetGvsRigthChild();
 					if(tmpNode!=null){
 						buildNode(pParent,tmpNode);	
 					}
@@ -298,39 +295,34 @@ namespace gvs_lib_csharp.gvs.tree
 			}			*/
 	
 		private void buildBinaryNode(XmlElement pParent, GVSBinaryTreeNode pNode){
-			XmlElement binaryNode = document.CreateElement(DEFAULTNODE); 
+			var binaryNode = document.CreateElement(DEFAULTNODE); 
 			pParent.AppendChild(binaryNode);
 			binaryNode.SetAttribute(ATTRIBUTEID,pNode.GetHashCode().ToString());
-			GVSNodeTyp nodeTyp =pNode.getGVSNodeTyp();
+			var nodeTyp =pNode.GetGvsNodeTyp();
 			
-			XmlElement label = document.CreateElement(LABEL);
+			var label = document.CreateElement(LABEL);
 			binaryNode.AppendChild(label);
-			string theLabel=pNode.getGVSNodeLabel();
-			
-			XmlElement lineColor = document.CreateElement(LINECOLOR); 
+			var theLabel=pNode.GetGvsNodeLabel() ?? "";
+            label.AppendChild(document.CreateTextNode(theLabel));
+
+            var lineColor = document.CreateElement(LINECOLOR); 
 			binaryNode.AppendChild(lineColor);
 
-			XmlElement lineStyle = document.CreateElement(LINESTYLE);
+			var lineStyle = document.CreateElement(LINESTYLE);
 			binaryNode.AppendChild(lineStyle);
 			
-			XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+			var lineThick = document.CreateElement(LINETHICKNESS);
 			binaryNode.AppendChild(lineThick);
 			
-			XmlElement fillColor = document.CreateElement(FILLCOLOR);
+			var fillColor = document.CreateElement(FILLCOLOR);
 			binaryNode.AppendChild(fillColor);
 			
-			if(theLabel==null) {
-				theLabel="";
-			}
-			label.AppendChild(document.CreateTextNode(theLabel));
-			
-		
 			if(nodeTyp!=null){
 				
-				lineColor.AppendChild(document.CreateTextNode(nodeTyp.getLineColor().ToString()));
-				lineStyle.AppendChild(document.CreateTextNode(nodeTyp.getLineStyle().ToString()));	
+				lineColor.AppendChild(document.CreateTextNode(nodeTyp.GetLineColor().ToString()));
+				lineStyle.AppendChild(document.CreateTextNode(nodeTyp.GetLineStyle().ToString()));	
 				lineThick.AppendChild(document.CreateTextNode(nodeTyp.getLineThickness().ToString()));	
-				fillColor.AppendChild(document.CreateTextNode(nodeTyp.getFillColor().ToString()));
+				fillColor.AppendChild(document.CreateTextNode(nodeTyp.GetFillColor().ToString()));
 			}
 			else{
 				lineColor.AppendChild(document.CreateTextNode(STANDARD));
@@ -339,15 +331,15 @@ namespace gvs_lib_csharp.gvs.tree
 				fillColor.AppendChild(document.CreateTextNode(STANDARD));
 			}
 			
-			GVSBinaryTreeNode leftNode=pNode.getGVSLeftChild();
-			GVSBinaryTreeNode rigthNode=pNode.getGVSRigthChild();
+			var leftNode=pNode.GetGvsLeftChild();
+			var rigthNode=pNode.GetGvsRigthChild();
 			if(leftNode!=null){
-				XmlElement leftChild = document.CreateElement(LEFTCHILD);
+				var leftChild = document.CreateElement(LEFTCHILD);
 				binaryNode.AppendChild(leftChild);
 				leftChild.AppendChild(document.CreateTextNode(leftNode.GetHashCode().ToString()));
 			}
 			if(rigthNode!=null){
-				XmlElement rigthChild = document.CreateElement(RIGTHCHILD);
+				var rigthChild = document.CreateElement(RIGTHCHILD);
 				binaryNode.AppendChild(rigthChild);
 				rigthChild.AppendChild(document.CreateTextNode(rigthNode.GetHashCode().ToString()));
 			}
