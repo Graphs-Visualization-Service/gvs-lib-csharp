@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using gvs_lib_csharp.gvs.connection;
+using gvs_lib_csharp.gvs.styles;
 using static System.Configuration.ConfigurationSettings;
 
 namespace gvs_lib_csharp.gvs.tree
@@ -287,8 +288,8 @@ namespace gvs_lib_csharp.gvs.tree
 			var binaryNode = document.CreateElement(DEFAULTNODE); 
 			pParent.AppendChild(binaryNode);
 			binaryNode.SetAttribute(ATTRIBUTEID,pNode.GetHashCode().ToString());
-			var nodeTyp =pNode.GetStyle();
-			
+			var nodeStyle =pNode.GetStyle() ?? new GVSStyle();
+
 			var label = document.CreateElement(LABEL);
 			binaryNode.AppendChild(label);
 			var theLabel=pNode.GetGvsNodeLabel() ?? "";
@@ -306,19 +307,12 @@ namespace gvs_lib_csharp.gvs.tree
 			var fillColor = document.CreateElement(FILLCOLOR);
 			binaryNode.AppendChild(fillColor);
 			
-			if(nodeTyp!=null){
 				
-				lineColor.AppendChild(document.CreateTextNode(nodeTyp.GetLineColor().ToString()));
-				lineStyle.AppendChild(document.CreateTextNode(nodeTyp.GetLineStyle().ToString()));	
-				lineThick.AppendChild(document.CreateTextNode(nodeTyp.GetLineThickness().ToString()));	
-				fillColor.AppendChild(document.CreateTextNode(nodeTyp.GetFillColor().ToString()));
-			}
-			else{
-				lineColor.AppendChild(document.CreateTextNode(STANDARD));
-				lineStyle.AppendChild(document.CreateTextNode(STANDARD));	
-				lineThick.AppendChild(document.CreateTextNode(STANDARD));	
-				fillColor.AppendChild(document.CreateTextNode(STANDARD));
-			}
+		    lineColor.AppendChild(document.CreateTextNode(nodeStyle.GetLineColor().ToString()));
+		    lineStyle.AppendChild(document.CreateTextNode(nodeStyle.GetLineStyle().ToString()));	
+		    lineThick.AppendChild(document.CreateTextNode(nodeStyle.GetLineThickness().ToString()));	
+		    fillColor.AppendChild(document.CreateTextNode(nodeStyle.GetFillColor().ToString()));
+			
 			
 			var leftNode=pNode.GetGvsLeftChild();
 			var rigthNode=pNode.GetGvsRigthChild();
