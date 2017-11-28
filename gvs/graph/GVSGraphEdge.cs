@@ -1,5 +1,5 @@
 using System;
-using gvs_lib_csharp.gvs.typ.edge;
+using gvs_lib_csharp.gvs.styles;
 
 namespace gvs_lib_csharp.gvs.graph
 {
@@ -18,6 +18,6 @@ namespace gvs_lib_csharp.gvs.graph
 		/// Returns the edgetyp. 
 		/// </summary>
 		/// <returns>the edgetyp. If it is null the default typ will be set</returns>
-		GVSEdgeTyp GetGvsEdgeTyp();
+		GVSStyle GetStyle();
 	}
 }

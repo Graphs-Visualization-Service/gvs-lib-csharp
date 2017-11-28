@@ -1,5 +1,5 @@
 using System;
-using gvs_lib_csharp.gvs.typ.vertex;
+using gvs_lib_csharp.gvs.styles;
 
 namespace gvs_lib_csharp.gvs.graph
 {
@@ -18,6 +18,6 @@ namespace gvs_lib_csharp.gvs.graph
 		/// Returns the typ of the vertex
 		/// </summary>
 		/// <returns>the typ. If it is null the default typ will be set</returns>
-		GVSVertexTyp GetGvsVertexTyp();
+		GVSStyle GetStyle();
 	}
 }

@@ -1,5 +1,5 @@
 using System;
-using gvs_lib_csharp.gvs.typ.node;
+using gvs_lib_csharp.gvs.styles;
 
 namespace gvs_lib_csharp.gvs.tree
 {
@@ -18,6 +18,6 @@ namespace gvs_lib_csharp.gvs.tree
 		/// Returns the typ of the node
 		/// </summary>
 		/// <returns>nodeTyp. If it is null the default typ will be set</returns>
-		GVSNodeTyp GetGvsNodeTyp();
+		GVSStyle GetStyle();
 	}
 }
