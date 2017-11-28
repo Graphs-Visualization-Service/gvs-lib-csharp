@@ -30,7 +30,6 @@ namespace gvs_lib_csharp.gvs.tree
 		private long gvsTreeId=0;
 		private string gvsTreeName="";
 		private GVSTreeNode gvsTreeRoot=null;
-		private int maxLabelLength=0;
 	
 		//	Config
 		private const string GVSPORTFILE="GVSPortFile";
@@ -122,15 +121,6 @@ namespace gvs_lib_csharp.gvs.tree
 		public void SetRoot(GVSTreeNode pGVSRootTreeNode) {
 			this.gvsTreeRoot=pGVSRootTreeNode;
 		}
-
-		/// <summary>
-		///  Set the maxLabelLength
-		/// </summary>
-		/// <param name="pMaxLabelLength"></param>
-		public void SetMaxLabelLength(int pMaxLabelLength){
-			this.maxLabelLength=pMaxLabelLength;
-		}
-
 
 		/// <summary>
 		/// Build the tree and check for cycles. 

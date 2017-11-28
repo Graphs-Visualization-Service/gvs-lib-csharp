@@ -228,14 +228,6 @@ namespace gvs_lib_csharp.gvs.tree
 		}
 
 		/// <summary>
-		///  Set the maxLabelLength
-		/// </summary>
-		/// <param name="pMaxLabelLength"></param>
-		public void SetMaxLabelLength(int pMaxLabelLength){
-			this.maxLabelLength=pMaxLabelLength;
-		}
-
-		/// <summary>
 		///  Build the Xml and send it.
 		///  It examined whether the tree cycles contains. 
 		///  If the Client terminated, since this is not permitted

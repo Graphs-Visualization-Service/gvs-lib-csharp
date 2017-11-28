@@ -52,18 +52,16 @@
     <Compile Include="gvs\graph\GVSGraphEdge.cs" />
     <Compile Include="gvs\graph\GVSRelativeVertex.cs" />
     <Compile Include="gvs\graph\GVSUndirectedEdge.cs" />
+    <Compile Include="gvs\styles\GVSColor.cs" />
+    <Compile Include="gvs\styles\GVSIcon.cs" />
+    <Compile Include="gvs\styles\GVSLineStyle.cs" />
+    <Compile Include="gvs\styles\GVSLineThickness.cs" />
+    <Compile Include="gvs\styles\GVSStyle.cs" />
     <Compile Include="gvs\tree\GVSBinaryTreeNode.cs" />
     <Compile Include="gvs\tree\GVSDefaultTreeNode.cs" />
     <Compile Include="gvs\tree\GVSTreeNode.cs" />
     <Compile Include="gvs\tree\GVSTreeWithCollection.cs" />
     <Compile Include="gvs\tree\GVSTreeWithRoot.cs" />
-    <Compile Include="gvs\typ\edge\GVSEdgeTyp.cs" />
-    <Compile Include="gvs\typ\graph\GVSGraphTyp.cs" />
-    <Compile Include="gvs\typ\GVSDefaultTyp.cs" />
-    <Compile Include="gvs\typ\node\GVSNodeTyp.cs" />
-    <Compile Include="gvs\typ\vertex\EllipseVertexTyp.cs" />
-    <Compile Include="gvs\typ\vertex\GVSIconVertex.cs" />
-    <Compile Include="gvs\typ\vertex\GVSVertexTyp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
