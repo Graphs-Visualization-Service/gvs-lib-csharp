@@ -1,6 +1,6 @@
 using System;
 
-namespace GVS_Client_Socket_v1._3.gvs.typ
+namespace gvs_lib_csharp.gvs.typ
 {
 	/// <summary>
 	/// Represents the general typdefinition for all vertex and nodes. That includes

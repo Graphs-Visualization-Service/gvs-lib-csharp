@@ -1,7 +1,7 @@
 using System;
-using GVS_Client_Socket_v1._3.gvs.typ.vertex;
+using gvs_lib_csharp.gvs.typ.vertex;
 
-namespace GVS_Client_Socket_v1._3.gvs.graph
+namespace gvs_lib_csharp.gvs.graph
 {
 	/// <summary>
 	/// This interface is needed for the realization of a DefaultVertex

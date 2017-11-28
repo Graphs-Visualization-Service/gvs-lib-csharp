@@ -1,18 +1,17 @@
 using System;
 using System.Xml;
+using System.Configuration;
 using System.Text;
 using System.Collections;
+using gvs_lib_csharp.gvs.connection;
+using gvs_lib_csharp.gvs.typ.node;
 
-using GVS_Client_Socket_v1._3.gvs.typ.node;
-using GVS_Client_Socket_v1._3.gvs.connection;
-using static System.Configuration.ConfigurationSettings;
-
-namespace GVS_Client_Socket_v1._3.gvs.tree
+namespace gvs_lib_csharp.gvs.tree
 {
 	/// <summary>
-	/// This class takes up only a rootnode. For transfer, the class build the tree
-	/// recursivly and add the nodes to a collection. 
-	/// It is to be made certain that the tree does not contain cycles. 
+	/// This class takes up those nodes to a Collection and transfers it to 
+	/// the server. It is to be made certain that the tree does not contain cycles. 
+	/// It does not play a role,if values are doubly added or removed. 
 	/// The connectioninformation have to be set in teh App.config file.
 	/// The key GVSPortFile or the Keys GVSHost,GVSPort have to be set.
 	/// If no configuration is aviable, localhost with port 3000 will be set.
@@ -20,17 +19,18 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 	/// Actually only BinaryTrees are supported, because the Layoutalgorithm are missing.
 	/// 
 	/// </summary>
-	public class GVSTreeWithRoot {
-		
+	public class GVSTreeWithCollection {
+		//For Send	
 		private XmlDocument document=null;
 		private XMLConnection xmlConnection=null;
 	
 		private String host=null;
 		private int port=0;
 	
+		//Datas
 		private long gvsTreeId=0;
 		private String gvsTreeName="";
-		private GVSTreeNode gvsTreeRoot=null;
+		private ArrayList gvsTreeNodes;
 		private int maxLabelLength=0;
 	
 		//	Config
@@ -38,7 +38,7 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 		private const String GVSHOST="GVSHost";
 		private const String GVSPORT="GVSPort";
 	
-		//General
+		// General
 		private const String ROOT="GVS";
 		private const String ATTRIBUTEID="Id";
 		private const String LABEL="Label";
@@ -58,27 +58,26 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 		private const String RIGTHCHILD="Rigthchild";
 		private const String LEFTCHILD="Leftchild";
 
-		//Datas
-		private ArrayList gvsTreeNodes;
-
 		/// <summary>
 		///  Init the tree and the connection
 		/// </summary>
 		/// <param name="pGVSTreeName"></param>
-		public GVSTreeWithRoot(String pGVSTreeName){
+		public GVSTreeWithCollection(String pGVSTreeName){
+
 			TimeSpan t = DateTime.Now.Subtract(new DateTime(1970,01,01,01,0,0,0));
 			long time = (long)(t.TotalMilliseconds);
+			
 			this.gvsTreeId=time;
-			this.gvsTreeNodes= new ArrayList();
 			this.gvsTreeName=pGVSTreeName;
+			this.gvsTreeNodes= new ArrayList();
 
 			if(this.gvsTreeName==null) {
 				this.gvsTreeName="";
 			}
 
-			string gvsPortFile = AppSettings[GVSPORTFILE];
-			string gvsHost =    AppSettings[GVSHOST];
-			string gvsPort =    AppSettings[GVSPORT];
+			string gvsPortFile = ConfigurationSettings.AppSettings[GVSPORTFILE];
+			string gvsHost =    ConfigurationSettings.AppSettings[GVSHOST];
+			string gvsPort =    ConfigurationSettings.AppSettings[GVSPORT];
 			if(gvsPortFile!=null){
 				try{
 					Console.WriteLine("Load socketinformation from " + gvsPortFile);
@@ -121,11 +120,127 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 		}
 
 		/// <summary>
-		///  Set the rootnode for the tree
+		///	 Add a Binarynode
 		/// </summary>
-		/// <param name="pGVSRootTreeNode"></param>
-		public void setRoot(GVSTreeNode pGVSRootTreeNode) {
-			this.gvsTreeRoot=pGVSRootTreeNode;
+		/// <param name="pGVSNode"></param>
+		public void add(GVSBinaryTreeNode pGVSNode){
+			if(gvsTreeNodes.Contains(pGVSNode)){
+			}
+			else{
+				this.gvsTreeNodes.Add(pGVSNode);
+			}
+		}
+
+		/// <summary>
+		///	 Add a Defaultnode
+		/// </summary>
+		/// <param name="pGVSNode"></param>
+		public void add(GVSDefaultTreeNode pGVSNode){
+			if(gvsTreeNodes.Contains(pGVSNode)){
+			}
+			else{
+				this.gvsTreeNodes.Add(pGVSNode);
+			}
+		}
+		
+		/// <summary>
+		///	 Add a BinaryNode-Array
+		/// </summary>
+		/// <param name="pGVSNode"></param>
+		public void add(GVSBinaryTreeNode[] pGVSNode){
+			for(int count=0;count<pGVSNode.Length;count++) {
+				if(this.gvsTreeNodes.Contains(pGVSNode[count])){
+				}
+				else{
+					this.gvsTreeNodes.Add(pGVSNode[count]);
+				}
+			}
+		}
+
+		/// <summary>
+		///	 Add a DefaultNode-Array
+		/// </summary>
+		/// <param name="pGVSNode"></param>
+		public void add(GVSDefaultTreeNode[] pGVSNode){
+			for(int count=0;count<pGVSNode.Length;count++) {
+				if(this.gvsTreeNodes.Contains(pGVSNode[count])){
+				}
+				else{
+					this.gvsTreeNodes.Add(pGVSNode[count]);
+				}
+			}	
+		}
+
+		/// <summary>
+		///	 Add a Collection of TreeNodes
+		/// </summary>
+		/// <param name="pGVSComponent"></param>
+		public void add(ICollection pGVSComponent){	
+			foreach(Object tmp in pGVSComponent){
+				Type[] interfaces=tmp.GetType().GetInterfaces();
+				foreach(Type theInterface in interfaces){
+					if(theInterface==typeof(GVSDefaultTreeNode)){
+						this.add((GVSDefaultTreeNode)tmp);							 
+					}
+					else if(theInterface==typeof(GVSBinaryTreeNode)){
+						this.add((GVSBinaryTreeNode)tmp);		
+					}
+				}
+			}
+		}
+		
+		/// <summary>
+		///	 Remove a DefaultNode
+		/// </summary>
+		/// <param name="pGVSNode"></param>
+		public void remove(GVSDefaultTreeNode pGVSNode){
+			this.gvsTreeNodes.Remove(pGVSNode);
+		}
+	
+		/// <summary>
+		///	 Remove a BinaryNode
+		/// </summary>
+		/// <param name="pGVSNode"></param>
+		public void remove(GVSBinaryTreeNode pGVSNode){
+			this.gvsTreeNodes.Remove(pGVSNode);
+		}
+		
+		/// <summary>
+		///	 Remove a DefaultNode-Array
+		/// </summary>
+		/// <param name="pGVSNode"></param>
+		public void remove(GVSDefaultTreeNode[] pGVSNode){
+			for(int count=0;count<pGVSNode.Length;count++) {
+				this.remove(pGVSNode[count]);	
+			}
+		}
+
+		/// <summary>
+		///	 Remove a BinaryNode-Array
+		/// </summary>
+		/// <param name="pGVSNode"></param>
+		public void remove(GVSBinaryTreeNode[] pGVSNode){
+			for(int count=0;count<pGVSNode.Length;count++) {
+				this.remove(pGVSNode[count]);
+			}
+		}
+
+		/// <summary>
+		///	 Remove a Collection of TreeNodes
+		/// </summary>
+		/// <param name="pGVSComponent"></param>
+		public void remove(ICollection pGVSComponent){
+			foreach(Object tmp in pGVSComponent){
+				Type[] interfaces=tmp.GetType().GetInterfaces();
+				foreach(Type theInterface in interfaces){
+					if(theInterface.FullName==typeof(GVSBinaryTreeNode).FullName){
+						this.remove((GVSBinaryTreeNode)tmp);							 
+					}
+					else if(theInterface.FullName==typeof(GVSDefaultTreeNode).FullName){
+						this.remove((GVSDefaultTreeNode)tmp);		
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -136,54 +251,65 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 			this.maxLabelLength=pMaxLabelLength;
 		}
 
-
 		/// <summary>
-		/// Build the tree and check for cycles. 
-		/// If the tree is ok, it will be send to the server
+		///  Build the Xml and send it.
+		///  It examined whether the tree cycles contains. 
+		///  If the Client terminated, since this is not permitted
 		/// </summary>
 		public void display(){
-			document = new XmlDocument();
-			XmlDeclaration dec = document.CreateXmlDeclaration("1.0",null,null);
-			dec.Encoding=Encoding.UTF8.ToString();
-			document.AppendChild(dec);
-			XmlElement root = document.CreateElement(ROOT);
-			document.AppendChild(root);
+			if(checkForCycles()){
+				document = new XmlDocument();
+				XmlDeclaration dec = document.CreateXmlDeclaration("1.0",null,null);
+				dec.Encoding=Encoding.UTF8.ToString();
+				document.AppendChild(dec);
+				XmlElement root = document.CreateElement(ROOT);
+				document.AppendChild(root);
 
-			 
-			XmlElement tree = document.CreateElement(TREE);
-			root.AppendChild(tree);
-			tree.SetAttribute(ATTRIBUTEID,this.gvsTreeId.ToString());
+				 
+				XmlElement tree = document.CreateElement(TREE);
+				root.AppendChild(tree);
+				tree.SetAttribute(ATTRIBUTEID,this.gvsTreeId.ToString());
 
-			XmlElement treeLabel = document.CreateElement(LABEL);
-			tree.AppendChild(treeLabel);
-			treeLabel.AppendChild(document.CreateTextNode(this.gvsTreeName));
+				XmlElement treeLabel = document.CreateElement(LABEL);
+				tree.AppendChild(treeLabel);
+				treeLabel.AppendChild(document.CreateTextNode(this.gvsTreeName));
 
-			if(this.gvsTreeRoot!=null){
-				XmlElement treeRoot= document.CreateElement(TREEROOTID); 
-				tree.AppendChild(treeRoot);
-				treeRoot.AppendChild(document.CreateTextNode(this.gvsTreeRoot.GetHashCode().ToString()));
-			 
 				XmlElement nodes = document.CreateElement(NODES);
 				root.AppendChild(nodes);
-				buildNode(nodes,this.gvsTreeRoot);
- 
-			}
-			else{
-				Console.WriteLine("Kein Root deklariert");
-			}
 
-			if(!checkForCycles()){
+				
+				foreach(GVSTreeNode node in gvsTreeNodes){
 
+					Type[] interfaces=node.GetType().GetInterfaces();
+					foreach(Type theInterface in interfaces){
+						if(theInterface.FullName==typeof(GVSBinaryTreeNode).FullName){
+							GVSBinaryTreeNode theNode=(GVSBinaryTreeNode)node;
+							if(theNode!=null){
+								buildBinaryNode(nodes,theNode);
+							}
+							else{
+								//Trace
+							}
+							break;
+						}
+						/*else if(theInterface.FullName==typeof(GVSDefaultTreeNode).FullName){
+							GVSDefaultTreeNode theNode =(GVSDefaultTreeNode)node;
+							if(theNode!=null){
+								buildDefaultNode(nodes,theNode);
+							}
+							else{
+							}
+							break;
+						}		   */
+					}
+				}
 				document.Save(Console.Out);
 				xmlConnection.sendFile(document);
-			}
-			else{
-				Console.WriteLine("Baum enthält Zyklen. Kein senden erlaubt");
 			}
 		}
 
 		/// <summary>
-		///  Disconnect from server
+		///	 Disconnect from server
 		/// </summary>
 		public void disconnect(){
 			xmlConnection.disconnectFromServer();
@@ -192,10 +318,9 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 		/// <summary>
 		/// Call disconnect()
 		/// </summary>
-		~GVSTreeWithRoot() {
+		~GVSTreeWithCollection() {
 			this.disconnect();
 		}
-
 
 		private bool checkForCycles() {
 			bool hasCycle=false;
@@ -210,7 +335,7 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 				}
 				if(counter>=2){
 					hasCycle=true;
-					Console.WriteLine("CICLE in the tree!!!!");
+					Console.WriteLine("CYCLE in the tree!!!!");
 					break;
 				}
 			}
@@ -218,36 +343,10 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 		
 		}
 
-		//***************************************XML-BUILDERS***********************************************
-		private void buildNode(XmlElement pParent, GVSTreeNode pNode){
-			gvsTreeNodes.Add(pNode);
-			Type[] interfaces=pNode.GetType().GetInterfaces();
-			foreach(Type theInterface in interfaces){
-				if(theInterface.FullName==typeof(GVSBinaryTreeNode).FullName){
-					buildBinaryNode(pParent,(GVSBinaryTreeNode)pNode);
-					GVSBinaryTreeNode tmpNode=((GVSBinaryTreeNode)pNode).getGVSLeftChild();
-					if(tmpNode!=null){
-						buildNode(pParent,tmpNode);	
-					}
-					tmpNode=((GVSBinaryTreeNode)pNode).getGVSRigthChild();
-					if(tmpNode!=null){
-						buildNode(pParent,tmpNode);	
-					}
-					break;
-				}
-				else if(theInterface.FullName==typeof(GVSDefaultTreeNode).FullName){
-					//buildDefaultNode(pParent,(GVSDefaultTreeNode)pNode);
-					//GVSDefaultTreeNode[] childs=((GVSDefaultTreeNode)(pNode)).getChildNodes();
-					//if(childs!=null){
-					//for(int size=0;size<childs.Length;size++){
-					//buildNode(pParent,childs[size]);
-					//}
-					//}
-				}
-			}	
-		}
-	
+		//*****************************************XML-BUILDERS***********************************************
+
 		/*	private void buildDefaultNode(XmlElement pParent, GVSDefaultTreeNode pNode){
+			
 				XmlElement defaultNode = document.CreateElement(DEFAULTNODE); 
 				pParent.AppendChild(defaultNode);
 				defaultNode.SetAttribute(ATTRIBUTEID,pNode.GetHashCode().ToString());
@@ -274,9 +373,8 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 				}
 				label.AppendChild(document.CreateTextNode(theLabel));
 			
-		
 				if(nodeTyp!=null){
-				
+			
 					lineColor.AppendChild(document.CreateTextNode(nodeTyp.getLineColor().ToString()));
 					lineStyle.AppendChild(document.CreateTextNode(nodeTyp.getLineStyle().ToString()));	
 					lineThick.AppendChild(document.CreateTextNode(nodeTyp.getLineThickness().ToString()));	
@@ -289,16 +387,22 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 					fillColor.AppendChild(document.CreateTextNode(STANDARD));
 				}
 				GVSDefaultTreeNode[] childs=pNode.getChildNodes();
-					if(childs!=null){
-						for(int size=0;size<childs.Length;size++){
+				if(childs!=null){
+					for(int size=0;size<childs.Length;size++){
+						if(gvsTreeNodes.Contains(childs[size])){
 							XmlElement child = document.CreateElement(CHILDID);
 							defaultNode.AppendChild(child);
 							child.AppendChild(document.CreateTextNode(childs[size].GetHashCode().ToString()));
+						}
+						else{
+							Console.WriteLine("Child " + childs[size].getNodeLabel() +" existiert nicht in der Collection");
+						}		
 					}
-				}
-			}			*/
+				}	
+			}		*/
 	
 		private void buildBinaryNode(XmlElement pParent, GVSBinaryTreeNode pNode){
+			
 			XmlElement binaryNode = document.CreateElement(DEFAULTNODE); 
 			pParent.AppendChild(binaryNode);
 			binaryNode.SetAttribute(ATTRIBUTEID,pNode.GetHashCode().ToString());
@@ -343,14 +447,24 @@ namespace GVS_Client_Socket_v1._3.gvs.tree
 			GVSBinaryTreeNode leftNode=pNode.getGVSLeftChild();
 			GVSBinaryTreeNode rigthNode=pNode.getGVSRigthChild();
 			if(leftNode!=null){
-				XmlElement leftChild = document.CreateElement(LEFTCHILD);
-				binaryNode.AppendChild(leftChild);
-				leftChild.AppendChild(document.CreateTextNode(leftNode.GetHashCode().ToString()));
+				if(this.gvsTreeNodes.Contains(leftNode)){
+					XmlElement leftChild = document.CreateElement(LEFTCHILD);
+					binaryNode.AppendChild(leftChild);
+					leftChild.AppendChild(document.CreateTextNode(leftNode.GetHashCode().ToString()));
+				}
+				else{
+					Console.WriteLine("Leftchild " + leftNode.getGVSNodeLabel()+" existiert nicht in der Collection");
+				}
 			}
 			if(rigthNode!=null){
-				XmlElement rigthChild = document.CreateElement(RIGTHCHILD);
-				binaryNode.AppendChild(rigthChild);
-				rigthChild.AppendChild(document.CreateTextNode(rigthNode.GetHashCode().ToString()));
+				if(this.gvsTreeNodes.Contains(rigthNode)){
+					XmlElement rigthChild = document.CreateElement(RIGTHCHILD);
+					binaryNode.AppendChild(rigthChild);
+					rigthChild.AppendChild(document.CreateTextNode(rigthNode.GetHashCode().ToString()));
+				}
+				else{
+					Console.WriteLine("Rigthchild " + rigthNode.getGVSNodeLabel()+" existiert nicht in der Collection");
+				}
 			}
 		}
 	}

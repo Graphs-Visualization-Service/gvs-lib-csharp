@@ -1,7 +1,7 @@
 using System;
-using GVS_Client_Socket_v1._3.gvs.typ.node;
+using gvs_lib_csharp.gvs.typ.node;
 
-namespace GVS_Client_Socket_v1._3.gvs.tree
+namespace gvs_lib_csharp.gvs.tree
 {
 	/// <summary>
 	/// Superclass for nodes. Do not use

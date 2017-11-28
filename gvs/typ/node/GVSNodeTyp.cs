@@ -1,7 +1,7 @@
 using System;
-using GVS_Client_Socket_v1._3.gvs.typ.vertex;
+using gvs_lib_csharp.gvs.typ.vertex;
 
-namespace GVS_Client_Socket_v1._3.gvs.typ.node
+namespace gvs_lib_csharp.gvs.typ.node
 {
 	/// <summary>
 	/// Represents a node which will be drawn as a Ellipse.

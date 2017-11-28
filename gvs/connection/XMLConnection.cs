@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Xml;
 
-namespace GVS_Client_Socket_v1._3.gvs.connection
+namespace gvs_lib_csharp.gvs.connection
 {
 	/// <summary>
 	/// Connection-Class for the GVS. If the Server is busy,

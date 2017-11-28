@@ -1,6 +1,7 @@
 using System;
+using gvs_lib_csharp.gvs.graph;
 
-namespace GVS_Client_Socket_v1._3.gvs.graph
+namespace gvs_lib_csharp._3.gvs.graph
 {
 	/// <summary>
 	/// Represents a Undirectededge. The Edge could be drawn with an Arrow

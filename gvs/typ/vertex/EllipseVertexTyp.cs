@@ -1,30 +1,33 @@
 using System;
 
-namespace GVS_Client_Socket_v1._3.gvs.typ.vertex
+namespace gvs_lib_csharp.gvs.typ.vertex
 {
 	/// <summary>
-	/// Represents a vertex which will be drawn with a image.
-	/// Linethickness,linecolor,linestyle and icon can be set.
+	/// Represents a vertex which will be drawn as a Ellipse.
+	/// Linethickness,linecolor,linestyle and fillcolor can be set.
 	/// </summary>
-	public class GVSIconVertexTyp : GVSVertexTyp{
-
-		public enum Icon{standard,image1,image2,image3,image4,image5,image6,image7,image8,image9 }
+	public class GVSEllipseVertexTyp : GVSVertexTyp{
+	
+		public enum FillColor{standard,gray,ligthGray,red,ligthRed,blue,darkBlue,
+			ligthBlue,green,ligthGreen,darkGreen,turqoise,yellow,
+			brown,orange,pink,violet
+		}
 	
 		private GVSDefaultTyp.LineColor lineColor;
 		private GVSDefaultTyp.LineStyle lineStyle;
 		private GVSDefaultTyp.LineThickness lineThickness;
-		private Icon icon;
+		private FillColor fillColor;
 	
-		public GVSIconVertexTyp(GVSDefaultTyp.LineColor pLineColor, GVSDefaultTyp.LineStyle pLineStyle,
-			GVSDefaultTyp.LineThickness pLineThickness, Icon pIcon){
+		public GVSEllipseVertexTyp(GVSDefaultTyp.LineColor pLineColor, GVSDefaultTyp.LineStyle pLineStyle,
+			GVSDefaultTyp.LineThickness pLineThickness, FillColor pFillColor){
 			this.lineColor=pLineColor;
 			this.lineStyle=pLineStyle;
 			this.lineThickness=pLineThickness;
-			this.icon=pIcon;
+			this.fillColor=pFillColor;
 		}
 
 		/// <summary>
-		/// Return the linceolor
+		/// Return the linecolor
 		/// </summary>
 		/// <returns>linecolor</returns>
 		public GVSDefaultTyp.LineColor getLineColor() {
@@ -32,7 +35,7 @@ namespace GVS_Client_Socket_v1._3.gvs.typ.vertex
 		}
 
 		/// <summary>
-		/// Return the lincestyle
+		/// Return the linestyle
 		/// </summary>
 		/// <returns>linestyle</returns>
 		public GVSDefaultTyp.LineStyle getLineStyle() {
@@ -48,12 +51,12 @@ namespace GVS_Client_Socket_v1._3.gvs.typ.vertex
 		}
 
 		/// <summary>
-		///	Return the icon
+		/// Return the fillcolor
 		/// </summary>
-		/// <returns>icon</returns>
-		public Icon getIcon(){
-			return icon;
+		/// <returns>fillcolor</returns>
+		public FillColor getFillColor() {
+			return fillColor;
 		}
-	
+
 	}
 }

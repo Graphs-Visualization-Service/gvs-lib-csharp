@@ -1,6 +1,6 @@
 using System;
 
-namespace GVS_Client_Socket_v1._3.gvs.typ.graph
+namespace gvs_lib_csharp.gvs.typ.graph
 {
 	/// <summary>
 	/// Represents a Graphtyp. A backgroundimage can be set.

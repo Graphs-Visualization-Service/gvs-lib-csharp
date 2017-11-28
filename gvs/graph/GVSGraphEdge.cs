@@ -1,7 +1,7 @@
 using System;
-using GVS_Client_Socket_v1._3.gvs.typ.edge;
+using gvs_lib_csharp.gvs.typ.edge;
 
-namespace GVS_Client_Socket_v1._3.gvs.graph
+namespace gvs_lib_csharp.gvs.graph
 {
 	/// <summary>
 	/// Super class for Edges. Do not use

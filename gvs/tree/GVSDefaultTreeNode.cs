@@ -1,6 +1,6 @@
 using System;
 
-namespace GVS_Client_Socket_v1._3.gvs.tree
+namespace gvs_lib_csharp.gvs.tree
 {
 	/// <summary>
 	/// Represents a DefaultTreeNode.

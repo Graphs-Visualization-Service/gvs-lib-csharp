@@ -5,12 +5,14 @@ using System.Xml;
 using System.Configuration;
 using System.IO;
 
-using GVS_Client_Socket_v1._3.gvs.typ.graph;
-using GVS_Client_Socket_v1._3.gvs.typ.vertex;
-using GVS_Client_Socket_v1._3.gvs.typ.edge;
-using GVS_Client_Socket_v1._3.gvs.connection;
+using System.Collections.Generic;
+using gvs_lib_csharp.gvs.connection;
+using gvs_lib_csharp.gvs.typ.edge;
+using gvs_lib_csharp.gvs.typ.graph;
+using gvs_lib_csharp.gvs.typ.vertex;
+using gvs_lib_csharp._3.gvs.graph;
 
-namespace GVS_Client_Socket_v1._3.gvs.graph
+namespace gvs_lib_csharp.gvs.graph
 {
 	/// <summary>
 	/// This class represents the graph. Null values are translated on standard or 
@@ -196,7 +198,7 @@ namespace GVS_Client_Socket_v1._3.gvs.graph
 		///	 Add a Collection of GVSComponents
 		/// </summary>
 		/// <param name="pGVSComponent"></param>
-		public void add(ICollection pGVSComponent){
+		public void add(ICollection<Object> pGVSComponent){
 			
 			foreach(Object tmp in pGVSComponent){
 				Type[] interfaces=tmp.GetType().GetInterfaces();
@@ -293,7 +295,7 @@ namespace GVS_Client_Socket_v1._3.gvs.graph
 					}
 					else if(theInterface.FullName==typeof(GVSUndirectedEdge).FullName){
 						GVSUndirectedEdge ue = (GVSUndirectedEdge)edge;
-						GVSDefaultVertex[] vertizes=ue.getGVSVertizes();
+						var vertizes=ue.getGVSVertizes();
 						for(int counter=0;counter<vertizes.Length;counter++){
 							if(vertizes[counter]==pGVSVertex){
 								toRemove.Add(ue);
@@ -328,7 +330,7 @@ namespace GVS_Client_Socket_v1._3.gvs.graph
 					}
 					else if(theInterface.FullName==typeof(GVSUndirectedEdge).FullName){
 						GVSUndirectedEdge ue = (GVSUndirectedEdge)edge;
-						GVSDefaultVertex[] vertizes=ue.getGVSVertizes();
+						var vertizes=ue.getGVSVertizes();
 						for(int counter=0;counter<vertizes.Length;counter++){
 							if(vertizes[counter]==pGVSVertex){
 								toRemove.Add(ue);
@@ -499,7 +501,7 @@ namespace GVS_Client_Socket_v1._3.gvs.graph
 			XmlElement defaultVertex = document.CreateElement(DEFAULTVERTEX);
 			pParent.AppendChild(defaultVertex);
 			defaultVertex.SetAttribute(ATTRIBUTEID,pVertex.GetHashCode().ToString());
-			GVSVertexTyp vertexTypNull=pVertex.getGVSVertexTyp();
+			var vertexTypNull=pVertex.getGVSVertexTyp();
 			if(vertexTypNull!=null){
 				if(pVertex.getGVSVertexTyp().GetType().FullName==typeof(GVSEllipseVertexTyp).FullName){
 					GVSEllipseVertexTyp vertexTyp=
@@ -594,7 +596,7 @@ namespace GVS_Client_Socket_v1._3.gvs.graph
 			XmlElement relativeVertex = document.CreateElement(RELATIVVERTEX);
 			pParent.AppendChild(relativeVertex);
 			relativeVertex.SetAttribute(ATTRIBUTEID,pVertex.GetHashCode().ToString());
-			GVSVertexTyp vertexTypNull=pVertex.getGVSVertexTyp();
+			var vertexTypNull=pVertex.getGVSVertexTyp();
 			if(vertexTypNull!=null){
 				if(pVertex.getGVSVertexTyp().GetType().FullName==typeof(GVSEllipseVertexTyp).FullName){
 					GVSEllipseVertexTyp vertexTyp=
@@ -728,7 +730,7 @@ namespace GVS_Client_Socket_v1._3.gvs.graph
 			}
 		
 			if(vertex1Exist==true && vertex2Exist==true &&vertex1!=null && vertex2!=null){
-				GVSEdgeTyp edgeTyp = pEdge.getGVSEdgeTyp();
+				var edgeTyp = pEdge.getGVSEdgeTyp();
 				XmlElement directedEdge = document.CreateElement(EDGE);
 				pParent.AppendChild(directedEdge);
 				directedEdge.SetAttribute(ATTRIBUTEID,pEdge.GetHashCode().ToString());
@@ -803,8 +805,8 @@ namespace GVS_Client_Socket_v1._3.gvs.graph
 
 		private void buildUndirectedEdge(XmlElement pParent, GVSUndirectedEdge pEdge){
 			if(pEdge.getGVSVertizes()!=null){
-				GVSDefaultVertex vertex1 = pEdge.getGVSVertizes()[0];
-				GVSDefaultVertex vertex2 = pEdge.getGVSVertizes()[1];
+				var vertex1 = pEdge.getGVSVertizes()[0];
+				var vertex2 = pEdge.getGVSVertizes()[1];
 				bool vertex1Exist=false;
 				bool vertex2Exist=false;
 			
