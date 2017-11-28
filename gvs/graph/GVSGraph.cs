@@ -485,7 +485,7 @@ namespace gvs_lib_csharp.gvs.graph
 						((GVSEllipseVertexTyp)(pVertex.getGVSVertexTyp()));
 					var label = document.CreateElement(LABEL);
 					defaultVertex.AppendChild(label);
-					var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+					var vertexLabel=pVertex.GetGVSVertexLabel() ?? "";
 
                     label.AppendChild(document.CreateTextNode(vertexLabel));
 
@@ -511,7 +511,7 @@ namespace gvs_lib_csharp.gvs.graph
 					var vertexTyp= ((GVSIconVertexTyp)(pVertex.getGVSVertexTyp()));
 					var label = document.CreateElement(LABEL);
 					defaultVertex.AppendChild(label);
-					var vertexLabel = pVertex.getGVSVertexLabel() ?? "";
+					var vertexLabel = pVertex.GetGVSVertexLabel() ?? "";
 					
 					label.AppendChild(document.CreateTextNode(vertexLabel));
 				
@@ -538,7 +538,7 @@ namespace gvs_lib_csharp.gvs.graph
 			else{
 				var label = document.CreateElement(LABEL);
 				defaultVertex.AppendChild(label);
-				var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+				var vertexLabel=pVertex.GetGVSVertexLabel() ?? "";
 				
 				label.AppendChild(document.CreateTextNode(vertexLabel));
 				
@@ -570,7 +570,7 @@ namespace gvs_lib_csharp.gvs.graph
 					var vertexTyp= ((GVSEllipseVertexTyp)(pVertex.getGVSVertexTyp()));
 					var label = document.CreateElement(LABEL);
 					relativeVertex.AppendChild(label);
-					var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+					var vertexLabel=pVertex.GetGVSVertexLabel() ?? "";
 
 					label.AppendChild(document.CreateTextNode(vertexLabel));
 
@@ -602,7 +602,7 @@ namespace gvs_lib_csharp.gvs.graph
 					var vertexTyp= ((GVSIconVertexTyp)(pVertex.getGVSVertexTyp()));
 					var label = document.CreateElement(LABEL);
 					relativeVertex.AppendChild(label);
-					var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+					var vertexLabel=pVertex.GetGVSVertexLabel() ?? "";
 
 					label.AppendChild(document.CreateTextNode(vertexLabel));
 
@@ -637,7 +637,7 @@ namespace gvs_lib_csharp.gvs.graph
 			else{
 				var label = document.CreateElement(LABEL);
 				relativeVertex.AppendChild(label);
-				var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+				var vertexLabel=pVertex.GetGVSVertexLabel() ?? "";
 				
 				label.AppendChild(document.CreateTextNode(vertexLabel));
 

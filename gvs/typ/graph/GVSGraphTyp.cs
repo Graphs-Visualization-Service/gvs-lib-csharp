@@ -19,7 +19,7 @@ namespace gvs_lib_csharp.gvs.typ.graph
 		/// Returns the Background. 
 		/// </summary>
 		/// <returns>Background</returns>
-		public Background getBackground() {
+		public Background GetBackground() {
 			return background;
 		}
 	

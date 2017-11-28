@@ -24,7 +24,7 @@ namespace gvs_lib_csharp.gvs.typ.edge
 		/// Returns the linecolor
 		/// </summary>
 		/// <returns>linecolor</returns>
-		public GVSDefaultTyp.LineColor getLineColor() {
+		public GVSDefaultTyp.LineColor GetLineColor() {
 			return lineColor;
 		}
 
@@ -32,7 +32,7 @@ namespace gvs_lib_csharp.gvs.typ.edge
 		/// Returns the linestyle
 		/// </summary>
 		/// <returns>linestyle</returns>
-		public GVSDefaultTyp.LineStyle getLineStyle() {
+		public GVSDefaultTyp.LineStyle GetLineStyle() {
 			return lineStyle;
 		}
 
@@ -40,7 +40,7 @@ namespace gvs_lib_csharp.gvs.typ.edge
 		/// Returns the linethickness
 		/// </summary>
 		/// <returns>linethickness</returns>
-		public GVSDefaultTyp.LineThickness getLineThickness(){
+		public GVSDefaultTyp.LineThickness GetLineThickness(){
 			return lineThickness;
 		}
 		

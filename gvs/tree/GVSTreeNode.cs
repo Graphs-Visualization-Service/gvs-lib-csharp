@@ -12,12 +12,12 @@ namespace gvs_lib_csharp.gvs.tree
 		/// Returns the label of the node
 		/// </summary>
 		/// <returns>nodeLabel. If it is null empty string will be set</returns>
-		string getGVSNodeLabel();
+		string GetGvsNodeLabel();
 		
 		/// <summary>
 		/// Returns the typ of the node
 		/// </summary>
 		/// <returns>nodeTyp. If it is null the default typ will be set</returns>
-		GVSNodeTyp getGVSNodeTyp();
+		GVSNodeTyp GetGvsNodeTyp();
 	}
 }

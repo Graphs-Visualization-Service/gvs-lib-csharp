@@ -12,12 +12,12 @@ namespace gvs_lib_csharp.gvs.graph
 		/// Returns the edgelabel. 
 		/// </summary>
 		/// <returns>the edgelabel. If it is null the label will be set to empty</returns>
-		string getGVSEdgeLabel();
+		string GetGvsEdgeLabel();
 
 		/// <summary>
 		/// Returns the edgetyp. 
 		/// </summary>
 		/// <returns>the edgetyp. If it is null the default typ will be set</returns>
-		GVSEdgeTyp getGVSEdgeTyp();
+		GVSEdgeTyp GetGvsEdgeTyp();
 	}
 }

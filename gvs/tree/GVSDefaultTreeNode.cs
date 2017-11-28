@@ -11,6 +11,6 @@ namespace gvs_lib_csharp.gvs.tree
 		/// Returns all childnodes
 		/// </summary>
 		/// <returns>childnodes</returns>
-		GVSDefaultTreeNode[] getGVSChildNodes();
+		GVSDefaultTreeNode[] GetGvsChildNodes();
 	}
 }

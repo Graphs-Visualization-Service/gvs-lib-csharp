@@ -27,7 +27,7 @@ namespace gvs_lib_csharp.gvs.typ.vertex
 		/// Return the linceolor
 		/// </summary>
 		/// <returns>linecolor</returns>
-		public GVSDefaultTyp.LineColor getLineColor() {
+		public GVSDefaultTyp.LineColor GetLineColor() {
 			return lineColor;
 		}
 
@@ -35,7 +35,7 @@ namespace gvs_lib_csharp.gvs.typ.vertex
 		/// Return the lincestyle
 		/// </summary>
 		/// <returns>linestyle</returns>
-		public GVSDefaultTyp.LineStyle getLineStyle() {
+		public GVSDefaultTyp.LineStyle GetLineStyle() {
 			return lineStyle;
 		}
 
@@ -43,7 +43,7 @@ namespace gvs_lib_csharp.gvs.typ.vertex
 		/// Return the linethickness
 		/// </summary>
 		/// <returns>linethickness</returns>
-		public GVSDefaultTyp.LineThickness getLineThickness() {
+		public GVSDefaultTyp.LineThickness GetLineThickness() {
 			return lineThickness;
 		}
 
@@ -51,7 +51,7 @@ namespace gvs_lib_csharp.gvs.typ.vertex
 		///	Return the icon
 		/// </summary>
 		/// <returns>icon</returns>
-		public Icon getIcon(){
+		public Icon GetIcon(){
 			return icon;
 		}
 	

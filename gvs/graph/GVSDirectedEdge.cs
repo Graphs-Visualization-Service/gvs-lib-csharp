@@ -12,13 +12,13 @@ namespace gvs_lib_csharp.gvs.graph
 		/// Returns the startevertex
 		/// </summary>
 		/// <returns>startevertex</returns>
-		GVSDefaultVertex getGVSStartVertex();
+		GVSDefaultVertex GetGvsStartVertex();
 		
 		/// <summary>
 		/// Returns the endvertex
 		/// </summary>
 		/// <returns>endvertex</returns>
-		GVSDefaultVertex getGVSEndVertex();
+		GVSDefaultVertex GetGvsEndVertex();
 	
 	}
 }

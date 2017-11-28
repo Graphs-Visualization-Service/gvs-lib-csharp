@@ -12,12 +12,12 @@ namespace gvs_lib_csharp.gvs.graph
 		///  Returns the label of the vertex
 		/// </summary>
 		/// <returns>the label. If it is null empty string will be set</returns>
-		string getGVSVertexLabel();
+		string GetGVSVertexLabel();
 		
 		/// <summary>
 		/// Returns the typ of the vertex
 		/// </summary>
 		/// <returns>the typ. If it is null the default typ will be set</returns>
-		GVSVertexTyp getGVSVertexTyp();
+		GVSVertexTyp GetGvsVertexTyp();
 	}
 }

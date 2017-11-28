@@ -30,7 +30,7 @@ namespace gvs_lib_csharp.gvs.typ.vertex
 		/// Return the linecolor
 		/// </summary>
 		/// <returns>linecolor</returns>
-		public GVSDefaultTyp.LineColor getLineColor() {
+		public GVSDefaultTyp.LineColor GetLineColor() {
 			return lineColor;
 		}
 
@@ -38,7 +38,7 @@ namespace gvs_lib_csharp.gvs.typ.vertex
 		/// Return the linestyle
 		/// </summary>
 		/// <returns>linestyle</returns>
-		public GVSDefaultTyp.LineStyle getLineStyle() {
+		public GVSDefaultTyp.LineStyle GetLineStyle() {
 			return lineStyle;
 		}
 
@@ -54,7 +54,7 @@ namespace gvs_lib_csharp.gvs.typ.vertex
 		/// Return the fillcolor
 		/// </summary>
 		/// <returns>fillcolor</returns>
-		public FillColor getFillColor() {
+		public FillColor GetFillColor() {
 			return fillColor;
 		}
 

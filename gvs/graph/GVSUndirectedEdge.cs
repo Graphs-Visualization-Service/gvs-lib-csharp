@@ -12,13 +12,13 @@ namespace gvs_lib_csharp._3.gvs.graph
 		/// Returns the connected nodes
 		/// </summary>
 		/// <returns> the 2 Nodes which are connected</returns>
-		GVSDefaultVertex[] getGVSVertizes();
+		GVSDefaultVertex[] GetGvsVertizes();
 
 		/// <summary>
 		/// Returns the Position of the Arrow. 1 and 2 are allowed.
 		/// Values greater or lower than 1 or 2 takes no effect
 		/// </summary>
 		/// <returns>the Arrow position</returns>
-		int hasArrow();
+		int HasArrow();
 	}
 }
