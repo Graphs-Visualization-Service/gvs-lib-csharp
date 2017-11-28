@@ -161,7 +161,7 @@ namespace gvs_lib_csharp.gvs.tree
 			 
 				var nodes = document.CreateElement(NODES);
 				root.AppendChild(nodes);
-				buildNode(nodes,this.gvsTreeRoot);
+				BuildNode(nodes,this.gvsTreeRoot);
  
 			}
 			else{
@@ -215,19 +215,19 @@ namespace gvs_lib_csharp.gvs.tree
 		}
 
 		//***************************************XML-BUILDERS***********************************************
-		private void buildNode(XmlElement pParent, GVSTreeNode pNode){
+		private void BuildNode(XmlElement pParent, GVSTreeNode pNode){
 			gvsTreeNodes.Add(pNode);
 			var interfaces=pNode.GetType().GetInterfaces();
 			foreach(var theInterface in interfaces){
 				if(theInterface.FullName==typeof(GVSBinaryTreeNode).FullName){
-					buildBinaryNode(pParent,(GVSBinaryTreeNode)pNode);
+					BuildBinaryNode(pParent,(GVSBinaryTreeNode)pNode);
 					var tmpNode=((GVSBinaryTreeNode)pNode).GetGvsLeftChild();
 					if(tmpNode!=null){
-						buildNode(pParent,tmpNode);	
+						BuildNode(pParent,tmpNode);	
 					}
 					tmpNode=((GVSBinaryTreeNode)pNode).GetGvsRigthChild();
 					if(tmpNode!=null){
-						buildNode(pParent,tmpNode);	
+						BuildNode(pParent,tmpNode);	
 					}
 					break;
 				}
@@ -294,7 +294,7 @@ namespace gvs_lib_csharp.gvs.tree
 				}
 			}			*/
 	
-		private void buildBinaryNode(XmlElement pParent, GVSBinaryTreeNode pNode){
+		private void BuildBinaryNode(XmlElement pParent, GVSBinaryTreeNode pNode){
 			var binaryNode = document.CreateElement(DEFAULTNODE); 
 			pParent.AppendChild(binaryNode);
 			binaryNode.SetAttribute(ATTRIBUTEID,pNode.GetHashCode().ToString());
