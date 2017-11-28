@@ -12,12 +12,12 @@ namespace gvs_lib_csharp.gvs.connection
 	/// </summary>
 	public class XMLConnection{
 		private int serverPort=0;
-		private String serverAdress="";
+		private string serverAdress="";
 		private TcpClient socket;
 		StreamWriter outWriter;
 		StreamReader inReader;
 
-		public XMLConnection(String pServerAdress, int pServerPort) {
+		public XMLConnection(string pServerAdress, int pServerPort) {
 			lock(this){
 				this.serverAdress=pServerAdress;
 				this.serverPort=pServerPort;
@@ -29,9 +29,9 @@ namespace gvs_lib_csharp.gvs.connection
 		/// If the Server is busy, the client wilb be terminated
 		/// </summary>
 		/// <returns>answer from the Server</returns>
-		public String connectToServer(){
+		public string connectToServer(){
 			lock(this){
-				String answer="";
+				string answer="";
 				try {
 					Console.WriteLine("Connect to server: " +
 						serverAdress + "port: "+ serverPort);

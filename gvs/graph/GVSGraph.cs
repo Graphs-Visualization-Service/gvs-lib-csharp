@@ -24,46 +24,46 @@ namespace gvs_lib_csharp.gvs.graph
 	/// 																																					 *  set over Properties. 
 	/// </summary>
 	public class GVSGraph{
-		private String host=null;
+		private string host=null;
 		private int port=0;
 		
 		private XmlDocument document=null;
 		private XMLConnection xmlConnection=null;
-		private const String GVSPORTFILE="GVSPortFile";
-		private const String GVSHOST="GVSHost";
-		private const String GVSPORT="GVSPort";
+		private const string GVSPORTFILE ="GVSPortFile";
+		private const string GVSHOST ="GVSHost";
+		private const string GVSPORT ="GVSPort";
 
 		private long gvsGraphId=0;
-		private String gvsGraphName="";
+		private string gvsGraphName ="";
 		private GVSGraphTyp gvsGraphTyp=null;
 		private int maxLabelLength=0;
 	
 		//Allgemein
-		private const String ROOT="GVS";
-		private const String ATTRIBUTEID="Id";
-		private const String LABEL="Label";
-		private const String FILLCOLOR="Fillcolor";
-		private const String ICON="Icon";
-		private const String LINECOLOR="Linecolor";
-		private const String LINESTYLE="Linestyle";
-		private const String LINETHICKNESS="Linethickness";
-		private const String STANDARD="standard";
+		private const string ROOT ="GVS";
+		private const string ATTRIBUTEID ="Id";
+		private const string LABEL ="Label";
+		private const string FILLCOLOR ="Fillcolor";
+		private const string ICON ="Icon";
+		private const string LINECOLOR ="Linecolor";
+		private const string LINESTYLE ="Linestyle";
+		private const string LINETHICKNESS ="Linethickness";
+		private const string STANDARD ="standard";
 
 		//Graph
-		private const String GRAPH="Graph";
-		private const String BACKGROUND="Background";
-		private const String MAXLABELLENGTH="MaxLabelLength"; 
-		private const String VERTIZES="Vertizes";
-		private const String RELATIVVERTEX="RelativVertex";
-		private const String DEFAULTVERTEX="DefaultVertex";
-		private const String XPOS="XPos";
-		private const String YPOS="YPos";
-		private const String EDGES="Edges";
-		private const String EDGE="Edge";
-		private const String ISDIRECTED="IsDirected";
-		private const String FROMVERTEX="FromVertex";
-		private const String TOVERTEX="ToVertex";
-		private const String ARROWPOS="DrawArrowOnPosition";
+		private const string GRAPH ="Graph";
+		private const string BACKGROUND ="Background";
+		private const string MAXLABELLENGTH="MaxLabelLength"; 
+		private const string VERTIZES="Vertizes";
+		private const string RELATIVVERTEX="RelativVertex";
+		private const string DEFAULTVERTEX="DefaultVertex";
+		private const string XPOS="XPos";
+		private const string YPOS="YPos";
+		private const string EDGES="Edges";
+		private const string EDGE="Edge";
+		private const string ISDIRECTED="IsDirected";
+		private const string FROMVERTEX="FromVertex";
+		private const string TOVERTEX="ToVertex";
+		private const string ARROWPOS="DrawArrowOnPosition";
 
 		//Datas
 		private static GVSGraphTyp defaultGraphTyp=new GVSGraphTyp(GVSGraphTyp.Background.standard);
@@ -74,7 +74,7 @@ namespace gvs_lib_csharp.gvs.graph
 		///	 Creates a Graph with default background
 		/// </summary>
 		/// <param name="pGVSGraphName"></param>
-		public GVSGraph(String pGVSGraphName):this(pGVSGraphName,null){
+		public GVSGraph(string pGVSGraphName):this(pGVSGraphName,null){
 		}
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace gvs_lib_csharp.gvs.graph
 		/// </summary>
 		/// <param name="pGVSGraphName"></param>
 		/// <param name="pGVSGraphTyp"></param>
-		public GVSGraph(String pGVSGraphName, GVSGraphTyp pGVSGraphTyp){
+		public GVSGraph(string pGVSGraphName, GVSGraphTyp pGVSGraphTyp){
 			
 			//Create the System.currentTimeMillis()(JAVA)
 			TimeSpan t = DateTime.Now.Subtract(new DateTime(1970,01,01,01,0,0,0));
@@ -508,7 +508,7 @@ namespace gvs_lib_csharp.gvs.graph
 						((GVSEllipseVertexTyp)(pVertex.getGVSVertexTyp()));
 					XmlElement label = document.CreateElement(LABEL);
 					defaultVertex.AppendChild(label);
-					String vertexLabel=pVertex.getGVSVertexLabel();
+					string vertexLabel=pVertex.getGVSVertexLabel();
 					if(vertexLabel==null){
 						vertexLabel="";
 					}
@@ -537,7 +537,7 @@ namespace gvs_lib_csharp.gvs.graph
 						((GVSIconVertexTyp)(pVertex.getGVSVertexTyp()));
 					XmlElement label = document.CreateElement(LABEL);
 					defaultVertex.AppendChild(label);
-					String vertexLabel=pVertex.getGVSVertexLabel();
+					string vertexLabel=pVertex.getGVSVertexLabel();
 					if(vertexLabel==null){
 						vertexLabel="";
 					}
@@ -568,7 +568,7 @@ namespace gvs_lib_csharp.gvs.graph
 			else{
 				XmlElement label = document.CreateElement(LABEL);
 				defaultVertex.AppendChild(label);
-				String vertexLabel=pVertex.getGVSVertexLabel();
+				string vertexLabel=pVertex.getGVSVertexLabel();
 				if(vertexLabel==null){
 					vertexLabel="";
 				}
@@ -603,7 +603,7 @@ namespace gvs_lib_csharp.gvs.graph
 						((GVSEllipseVertexTyp)(pVertex.getGVSVertexTyp()));
 					XmlElement label = document.CreateElement(LABEL);
 					relativeVertex.AppendChild(label);
-					String vertexLabel=pVertex.getGVSVertexLabel();
+					string vertexLabel=pVertex.getGVSVertexLabel();
 					if(vertexLabel==null){
 						vertexLabel="";
 					}
@@ -640,7 +640,7 @@ namespace gvs_lib_csharp.gvs.graph
 						((GVSIconVertexTyp)(pVertex.getGVSVertexTyp()));
 					XmlElement label = document.CreateElement(LABEL);
 					relativeVertex.AppendChild(label);
-					String vertexLabel=pVertex.getGVSVertexLabel();
+					string vertexLabel=pVertex.getGVSVertexLabel();
 					if(vertexLabel==null){
 						vertexLabel="";
 					}
@@ -680,7 +680,7 @@ namespace gvs_lib_csharp.gvs.graph
 			else{
 				XmlElement label = document.CreateElement(LABEL);
 				relativeVertex.AppendChild(label);
-				String vertexLabel=pVertex.getGVSVertexLabel();
+				string vertexLabel=pVertex.getGVSVertexLabel();
 				if(vertexLabel==null){
 					vertexLabel="";
 				}
@@ -738,7 +738,7 @@ namespace gvs_lib_csharp.gvs.graph
 				if(edgeTyp!=null){
 					XmlElement label = document.CreateElement(LABEL);
 					directedEdge.AppendChild(label);
-					String edgeLabel=pEdge.getGVSEdgeLabel();
+					string edgeLabel=pEdge.getGVSEdgeLabel();
 					if(edgeLabel==null){
 						edgeLabel="";
 					}
@@ -770,7 +770,7 @@ namespace gvs_lib_csharp.gvs.graph
 				else{
 					XmlElement label = document.CreateElement(LABEL);
 					directedEdge.AppendChild(label);
-					String edgeLabel=pEdge.getGVSEdgeLabel();
+					string edgeLabel=pEdge.getGVSEdgeLabel();
 					if(edgeLabel==null){
 						edgeLabel="";
 					}
@@ -830,7 +830,7 @@ namespace gvs_lib_csharp.gvs.graph
 					if(edgeTyp!=null){
 						XmlElement label = document.CreateElement(LABEL);
 						undirectedEdge.AppendChild(label);
-						String edgeLabel=pEdge.getGVSEdgeLabel();
+						string edgeLabel=pEdge.getGVSEdgeLabel();
 						if(edgeLabel==null){
 							edgeLabel="";
 						}
@@ -861,7 +861,7 @@ namespace gvs_lib_csharp.gvs.graph
 					else{
 						XmlElement label = document.CreateElement(LABEL);
 						undirectedEdge.AppendChild(label);
-						String edgeLabel=pEdge.getGVSEdgeLabel();
+						string edgeLabel=pEdge.getGVSEdgeLabel();
 						if(edgeLabel==null){
 							edgeLabel="";
 						}

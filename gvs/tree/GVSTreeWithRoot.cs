@@ -24,38 +24,38 @@ namespace gvs_lib_csharp.gvs.tree
 		private XmlDocument document=null;
 		private XMLConnection xmlConnection=null;
 	
-		private String host=null;
+		private string host=null;
 		private int port=0;
 	
 		private long gvsTreeId=0;
-		private String gvsTreeName="";
+		private string gvsTreeName="";
 		private GVSTreeNode gvsTreeRoot=null;
 		private int maxLabelLength=0;
 	
 		//	Config
-		private const String GVSPORTFILE="GVSPortFile";
-		private const String GVSHOST="GVSHost";
-		private const String GVSPORT="GVSPort";
+		private const string GVSPORTFILE="GVSPortFile";
+		private const string GVSHOST="GVSHost";
+		private const string GVSPORT="GVSPort";
 	
 		//General
-		private const String ROOT="GVS";
-		private const String ATTRIBUTEID="Id";
-		private const String LABEL="Label";
-		private const String FILLCOLOR="Fillcolor";
-		private const String LINECOLOR="Linecolor";
-		private const String LINESTYLE="Linestyle";
-		private const String LINETHICKNESS="Linethickness";
-		private const String STANDARD="standard";
+		private const string ROOT="GVS";
+		private const string ATTRIBUTEID="Id";
+		private const string LABEL="Label";
+		private const string FILLCOLOR="Fillcolor";
+		private const string LINECOLOR="Linecolor";
+		private const string LINESTYLE="Linestyle";
+		private const string LINETHICKNESS="Linethickness";
+		private const string STANDARD="standard";
 	
 		//	Tree
-		private const String TREE="Tree";
-		private const String NODES="Nodes";
-		private const String DEFAULTNODE="DefaultNode";
-		private const String BINARYNODE="BinaryNode";
-		private const String TREEROOTID = "TreeRootId";
-		private const String CHILDID="Childid";
-		private const String RIGTHCHILD="Rigthchild";
-		private const String LEFTCHILD="Leftchild";
+		private const string TREE="Tree";
+		private const string NODES="Nodes";
+		private const string DEFAULTNODE="DefaultNode";
+		private const string BINARYNODE="BinaryNode";
+		private const string TREEROOTID = "TreeRootId";
+		private const string CHILDID="Childid";
+		private const string RIGTHCHILD="Rigthchild";
+		private const string LEFTCHILD="Leftchild";
 
 		//Datas
 		private ArrayList gvsTreeNodes;
@@ -64,7 +64,7 @@ namespace gvs_lib_csharp.gvs.tree
 		///  Init the tree and the connection
 		/// </summary>
 		/// <param name="pGVSTreeName"></param>
-		public GVSTreeWithRoot(String pGVSTreeName){
+		public GVSTreeWithRoot(string pGVSTreeName){
 			TimeSpan t = DateTime.Now.Subtract(new DateTime(1970,01,01,01,0,0,0));
 			long time = (long)(t.TotalMilliseconds);
 			this.gvsTreeId=time;
@@ -254,7 +254,7 @@ namespace gvs_lib_csharp.gvs.tree
 			
 				XmlElement label = document.CreateElement(LABEL);
 				defaultNode.AppendChild(label);
-				String theLabel=pNode.getNodeLabel();
+				string theLabel=pNode.getNodeLabel();
 			
 				XmlElement lineColor = document.CreateElement(LINECOLOR); 
 				defaultNode.AppendChild(lineColor);
@@ -305,7 +305,7 @@ namespace gvs_lib_csharp.gvs.tree
 			
 			XmlElement label = document.CreateElement(LABEL);
 			binaryNode.AppendChild(label);
-			String theLabel=pNode.getGVSNodeLabel();
+			string theLabel=pNode.getGVSNodeLabel();
 			
 			XmlElement lineColor = document.CreateElement(LINECOLOR); 
 			binaryNode.AppendChild(lineColor);
