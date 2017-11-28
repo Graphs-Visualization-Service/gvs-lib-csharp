@@ -24,6 +24,7 @@ namespace gvs_lib_csharp.gvs.graph
 	/// 																																					 *  set over Properties. 
 	/// </summary>
 	public class GVSGraph{
+
 		private string host=null;
 		private int port=0;
 		
@@ -67,8 +68,8 @@ namespace gvs_lib_csharp.gvs.graph
 
 		//Datas
 		private static GVSGraphTyp defaultGraphTyp=new GVSGraphTyp(GVSGraphTyp.Background.standard);
-		private ArrayList gvsGraphVertizes;
-		private ArrayList gvsGraphEdges;
+		private HashSet<GVSDefaultVertex> gvsGraphVertizes;
+		private HashSet<GVSGraphEdge> gvsGraphEdges;
 		
 		/// <summary>
 		///	 Creates a Graph with default background
@@ -86,28 +87,24 @@ namespace gvs_lib_csharp.gvs.graph
 		public GVSGraph(string pGVSGraphName, GVSGraphTyp pGVSGraphTyp){
 			
 			//Create the System.currentTimeMillis()(JAVA)
-			TimeSpan t = DateTime.Now.Subtract(new DateTime(1970,01,01,01,0,0,0));
-			long time = (long)(t.TotalMilliseconds);
+			var t = DateTime.Now.Subtract(new DateTime(1970,01,01,01,0,0,0));
+			var time = (long)(t.TotalMilliseconds);
 			this.gvsGraphId=time;
 
-			this.gvsGraphName=pGVSGraphName;
-			if(this.gvsGraphName==null) {
-				this.gvsGraphName="";
-			}
-			this.gvsGraphTyp=pGVSGraphTyp;
-			if(this.gvsGraphTyp==null) {
-				this.gvsGraphTyp=defaultGraphTyp;
-			}
-			gvsGraphVertizes = new ArrayList();
-			gvsGraphEdges= new ArrayList();
+		    this.gvsGraphName = pGVSGraphName ?? "";
+			this.gvsGraphTyp=pGVSGraphTyp ?? defaultGraphTyp;
+			
+			gvsGraphVertizes = new HashSet<GVSDefaultVertex>();
+			gvsGraphEdges= new HashSet<GVSGraphEdge>();
 
-			string gvsPortFile = ConfigurationSettings.AppSettings[GVSPORTFILE];
-			string gvsHost =    ConfigurationSettings.AppSettings[GVSHOST];
-			string gvsPort =    ConfigurationSettings.AppSettings[GVSPORT];
-			if(gvsPortFile!=null){
+			var gvsPortFile = ConfigurationSettings.AppSettings[GVSPORTFILE];
+			var gvsHost =    ConfigurationSettings.AppSettings[GVSHOST];
+			var gvsPort =    ConfigurationSettings.AppSettings[GVSPORT];
+
+            if (gvsPortFile!=null){
 				try{
 					Console.WriteLine("Load socketinformation from " + gvsPortFile);
-					XmlTextReader reader = new XmlTextReader(gvsPortFile);
+					var reader = new XmlTextReader(gvsPortFile);
 					while(reader.Read()){
 						if(reader.IsStartElement("Port")){
 							reader.Read();
@@ -150,70 +147,54 @@ namespace gvs_lib_csharp.gvs.graph
 		///	 Add a DefaultVertex
 		/// </summary>
 		/// <param name="pGVSVertex"></param>
-		public void add(GVSDefaultVertex pGVSVertex){
-			if(gvsGraphVertizes.Contains(pGVSVertex)){
-			}
-			else{
-				this.gvsGraphVertizes.Add(pGVSVertex);
-			}
+		public void Add(GVSDefaultVertex pGVSVertex){
+			this.gvsGraphVertizes.Add(pGVSVertex);
 		}
 	
 		/// <summary>
 		///	  Add a RealtivVertex
 		/// </summary>
 		/// <param name="pGVSVertex"></param>
-		public void add(GVSRelativeVertex pGVSVertex){
-			if(this.gvsGraphVertizes.Contains(pGVSVertex)){
-			}
-			else{
-				this.gvsGraphVertizes.Add(pGVSVertex);
-			}
+		public void Add(GVSRelativeVertex pGVSVertex){
+            this.gvsGraphVertizes.Add(pGVSVertex);
 		}
 	
 		/// <summary>
 		///	 Add a UndirectedEdge
 		/// </summary>
 		/// <param name="pGVSEdge"></param>
-		public void add(GVSUndirectedEdge pGVSEdge){
-			if(this.gvsGraphEdges.Contains(pGVSEdge)){
-			}
-			else{
-				this.gvsGraphEdges.Add(pGVSEdge);
-			}
+		public void Add(GVSUndirectedEdge pGVSEdge){
+			this.gvsGraphEdges.Add(pGVSEdge);
 		}
 	
 		/// <summary>
 		///	 Add a DirectedEdge
 		/// </summary>
 		/// <param name="pGVSEdge"></param>
-		public void add(GVSDirectedEdge pGVSEdge){
-			if(this.gvsGraphEdges.Contains(pGVSEdge)){
-			}
-			else{
-				this.gvsGraphEdges.Add(pGVSEdge);
-			}
+		public void Add(GVSDirectedEdge pGVSEdge){
+			this.gvsGraphEdges.Add(pGVSEdge);
 		}
 
 		/// <summary>
 		///	 Add a Collection of GVSComponents
 		/// </summary>
 		/// <param name="pGVSComponent"></param>
-		public void add(ICollection<Object> pGVSComponent){
+		public void Add(ICollection<Object> pGVSComponent){
 			
-			foreach(Object tmp in pGVSComponent){
-				Type[] interfaces=tmp.GetType().GetInterfaces();
-				foreach(Type theInterface in interfaces){
+			foreach(var tmp in pGVSComponent){
+				var interfaces=tmp.GetType().GetInterfaces();
+				foreach(var theInterface in interfaces){
 					if(theInterface==typeof(GVSDirectedEdge)){
-						this.add((GVSDirectedEdge)tmp);							 
+						this.Add((GVSDirectedEdge)tmp);							 
 					}
 					else if(theInterface==typeof(GVSUndirectedEdge)){
-						this.add((GVSUndirectedEdge)tmp);		
+						this.Add((GVSUndirectedEdge)tmp);		
 					}
 					else if(theInterface==typeof(GVSRelativeVertex)){
-						this.add((GVSRelativeVertex)tmp);	
+						this.Add((GVSRelativeVertex)tmp);	
 					}
 					else if(theInterface==typeof(GVSDefaultVertex)){
-						this.add((GVSDefaultVertex)tmp);
+						this.Add((GVSDefaultVertex)tmp);
 					}
 				}
 			}
@@ -223,69 +204,57 @@ namespace gvs_lib_csharp.gvs.graph
 		///	 Add a Array of DirectedEdges
 		/// </summary>
 		/// <param name="pGVSEdge"></param>
-		public void add(GVSDirectedEdge[] pGVSEdge){
-			for(int count=0;count<pGVSEdge.Length;count++){
-				if(this.gvsGraphEdges.Contains(pGVSEdge[count])){
-				}
-				else{
-					this.gvsGraphEdges.Add(pGVSEdge[count]);
-				}
-			}
-		}
+		public void Add(GVSDirectedEdge[] pGVSEdge){
+            foreach (var gvsEdge in pGVSEdge)
+            {
+                this.gvsGraphEdges.Add(gvsEdge);
+            }
+        }
 	
 		/// <summary>
 		///	 Add a Array of UndirectedEdges
 		/// </summary>
 		/// <param name="pGVSEdge"></param>
-		public void add(GVSUndirectedEdge[] pGVSEdge){
-			for(int count=0;count<pGVSEdge.Length;count++){
-				if(this.gvsGraphEdges.Contains(pGVSEdge[count])){
-				}
-				else{
-					this.gvsGraphEdges.Add(pGVSEdge[count]);
-				}
-			}
-		}
+		public void Add(GVSUndirectedEdge[] pGVSEdge){
+            foreach (var gvsEdge in pGVSEdge)
+            {
+                this.gvsGraphEdges.Add(gvsEdge);
+            }
+        }
 	
 		/// <summary>
 		///	 Add a Array of DefaultVertizes
 		/// </summary>
 		/// <param name="pGVSVertex"></param>
-		public void add(GVSDefaultVertex[] pGVSVertex) {
-			for(int count=0;count<pGVSVertex.Length;count++){
-				if(gvsGraphVertizes.Contains(pGVSVertex[count])){
-				}
-				else{
-					this.gvsGraphVertizes.Add(pGVSVertex[count]);
-				}
-			}
-		}
+		public void Add(GVSDefaultVertex[] pGVSVertex) {
+            foreach (var gvsVertex in pGVSVertex)
+            {
+                this.gvsGraphVertizes.Add(gvsVertex);
+            }
+        }
 	
 		/// <summary>
 		///	  Add a Array of RelativVertizes
 		/// </summary>
 		/// <param name="pGVSVertex"></param>
-		public void add(GVSRelativeVertex[] pGVSVertex) {
-			for(int count=0;count<pGVSVertex.Length;count++){
-				if(gvsGraphVertizes.Contains(pGVSVertex[count])){
-				}
-				else{
-					this.gvsGraphVertizes.Add(pGVSVertex[count]);
-				}
-			}
+		public void Add(GVSRelativeVertex[] pGVSVertex) {
+            foreach (var gvsVertex in pGVSVertex)
+            {
+                this.gvsGraphVertizes.Add(gvsVertex);
+            }
 		}
 	
 		/// <summary>
 		///	 Remove a DefaultVertex. Connected edges will be removed to 
 		/// </summary>
 		/// <param name="pGVSVertex"></param>
-		public void remove(GVSDefaultVertex pGVSVertex){
-			ArrayList toRemove = new ArrayList();
-			foreach(Object edge in gvsGraphEdges){
-				Type[] interfaces=edge.GetType().GetInterfaces();
-				foreach(Type theInterface in interfaces){
+		public void Remove(GVSDefaultVertex pGVSVertex){
+			var toRemove = new ArrayList();
+			foreach(var edge in gvsGraphEdges){
+				var interfaces=edge.GetType().GetInterfaces();
+				foreach(var theInterface in interfaces){
 					if(theInterface.FullName==typeof(GVSDirectedEdge).FullName){
-						GVSDirectedEdge de = (GVSDirectedEdge)edge;
+						var de = (GVSDirectedEdge) edge;
 						if(pGVSVertex==de.getGVSEndVertex()){
 							toRemove.Add(de);
 						}
@@ -294,13 +263,15 @@ namespace gvs_lib_csharp.gvs.graph
 						}
 					}
 					else if(theInterface.FullName==typeof(GVSUndirectedEdge).FullName){
-						GVSUndirectedEdge ue = (GVSUndirectedEdge)edge;
+						var ue = (GVSUndirectedEdge)edge;
 						var vertizes=ue.getGVSVertizes();
-						for(int counter=0;counter<vertizes.Length;counter++){
-							if(vertizes[counter]==pGVSVertex){
-								toRemove.Add(ue);
-							}
-						}
+                        foreach (var gvsVertex in vertizes)
+                        {
+                            if (gvsVertex == pGVSVertex)
+                            {
+                                toRemove.Add(ue);
+                            }
+                        }
 					}
 				}
 			}
@@ -314,13 +285,13 @@ namespace gvs_lib_csharp.gvs.graph
 		/// Remove a RealtivVertex. Connected edges will be removed to 
 		/// </summary>
 		/// <param name="pGVSVertex"></param>
-		public void remove(GVSRelativeVertex pGVSVertex){
-			ArrayList toRemove = new ArrayList();
-			foreach(Object edge in gvsGraphEdges){
-				Type[] interfaces=edge.GetType().GetInterfaces();
-				foreach(Type theInterface in interfaces){
+		public void Remove(GVSRelativeVertex pGVSVertex){
+			var toRemove = new ArrayList();
+			foreach(var edge in gvsGraphEdges){
+				var interfaces=edge.GetType().GetInterfaces();
+				foreach(var theInterface in interfaces){
 					if(theInterface.FullName==typeof(GVSDirectedEdge).FullName){
-						GVSDirectedEdge de = (GVSDirectedEdge)edge;
+						var de = (GVSDirectedEdge)edge;
 						if(pGVSVertex==de.getGVSEndVertex()){
 							toRemove.Add(de);
 						}
@@ -329,13 +300,15 @@ namespace gvs_lib_csharp.gvs.graph
 						}
 					}
 					else if(theInterface.FullName==typeof(GVSUndirectedEdge).FullName){
-						GVSUndirectedEdge ue = (GVSUndirectedEdge)edge;
+						var ue = (GVSUndirectedEdge)edge;
 						var vertizes=ue.getGVSVertizes();
-						for(int counter=0;counter<vertizes.Length;counter++){
-							if(vertizes[counter]==pGVSVertex){
-								toRemove.Add(ue);
-							}
-						}
+					    foreach (var gvsVertex in vertizes)
+					    {
+                            if (gvsVertex == pGVSVertex)
+                            {
+                                toRemove.Add(ue);
+                            }
+                        }
 					}
 				}
 			}
@@ -349,7 +322,7 @@ namespace gvs_lib_csharp.gvs.graph
 		///	 Remove a DirectedEdge
 		/// </summary>
 		/// <param name="pGVSEdge"></param>
-		public void remove(GVSDirectedEdge pGVSEdge){
+		public void Remove(GVSDirectedEdge pGVSEdge){
 			this.gvsGraphEdges.Remove(pGVSEdge);
 		}
 	
@@ -357,7 +330,7 @@ namespace gvs_lib_csharp.gvs.graph
 		///	 Remove a UndirectedEdge
 		/// </summary>
 		/// <param name="pGVSEdge"></param>
-		public void remove(GVSUndirectedEdge pGVSEdge){
+		public void Remove(GVSUndirectedEdge pGVSEdge){
 			this.gvsGraphEdges.Remove(pGVSEdge);
 		}
 
@@ -365,21 +338,21 @@ namespace gvs_lib_csharp.gvs.graph
 		///	  Remove a Collection of GVSComponents. 
 		/// </summary>
 		/// <param name="pGVSComponent"></param>
-		public void remove(ICollection pGVSComponent){
-			foreach(Object tmp in pGVSComponent){
-				Type[] interfaces=tmp.GetType().GetInterfaces();
-				foreach(Type theInterface in interfaces){
+		public void Remove(ICollection pGVSComponent){
+			foreach(var tmp in pGVSComponent){
+				var interfaces=tmp.GetType().GetInterfaces();
+				foreach(var theInterface in interfaces){
 					if(theInterface.FullName==typeof(GVSDirectedEdge).FullName){
-						this.remove((GVSDirectedEdge)tmp);							 
+						this.Remove((GVSDirectedEdge)tmp);							 
 					}
 					else if(theInterface.FullName==typeof(GVSUndirectedEdge).FullName){
-						this.remove((GVSUndirectedEdge)tmp);		
+						this.Remove((GVSUndirectedEdge)tmp);		
 					}
 					else if(theInterface.FullName==typeof(GVSRelativeVertex).FullName){
-						this.remove((GVSRelativeVertex)tmp);	
+						this.Remove((GVSRelativeVertex)tmp);	
 					}
 					else if(theInterface.FullName==typeof(GVSDefaultVertex).FullName){
-						this.remove((GVSDefaultVertex)tmp);
+						this.Remove((GVSDefaultVertex)tmp);
 					}
 				}
 			}
@@ -389,105 +362,109 @@ namespace gvs_lib_csharp.gvs.graph
 		///	 Remove a Array of DirectedEdges
 		/// </summary>
 		/// <param name="pGVSEdge"></param>
-		public void remove(GVSDirectedEdge[] pGVSEdge){
-			for(int count=0;count<pGVSEdge.Length;count++){
-				this.gvsGraphEdges.Remove(pGVSEdge[count]);
-			}
-		}
+		public void Remove(GVSDirectedEdge[] pGVSEdge){
+            foreach (var gvsEdge in pGVSEdge)
+            {
+                Remove(gvsEdge);
+            }
+        }
 	
 		/// <summary>
 		///	 Remove a Array of UndirectedEdges
 		/// </summary>
 		/// <param name="pGVSEdge"></param>
-		public void remove(GVSUndirectedEdge[] pGVSEdge){
-			for(int count=0;count<pGVSEdge.Length;count++){
-				this.gvsGraphEdges.Remove(pGVSEdge[count]);
-			}
-		}
+		public void Remove(GVSUndirectedEdge[] pGVSEdge){
+            foreach (var gvsEdge in pGVSEdge)
+            {
+                Remove(gvsEdge);
+            }
+        }
 	
 		/// <summary>
 		///	 Remove a Array of DefaultVertizes
 		/// </summary>
 		/// <param name="pGVSVertex"></param>
-		public void remove(GVSDefaultVertex[] pGVSVertex){
-			for(int count=0;count<pGVSVertex.Length;count++) {
-				this.remove(pGVSVertex[count]);	
-			}
+		public void Remove(GVSDefaultVertex[] pGVSVertex){
+		    foreach (var gvsVertex in pGVSVertex)
+		    {
+		        Remove(gvsVertex);
+		    }
 		}
 
 		/// <summary>
 		///	 Remove a Array of RealtiveVertizes
 		/// </summary>
 		/// <param name="pGVSVertex"></param>
-		public void remove(GVSRelativeVertex[] pGVSVertex){
-			for(int count=0;count<pGVSVertex.Length;count++) {
-				this.remove(pGVSVertex[count]);	
-			}
-		}
+		public void Remove(GVSRelativeVertex[] pGVSVertex){
+            foreach (var gvsVertex in pGVSVertex)
+            {
+                Remove(gvsVertex);
+            }
+        }
 
 		/// <summary>
 		///	 Set the maxLabelLength.
 		/// </summary>
 		/// <param name="pMaxLength"></param>
-		public void setMaxLabelLength(int pMaxLength){
+		public void SetMaxLabelLength(int pMaxLength){
 			this.maxLabelLength=pMaxLength;
 		}
 
 		/// <summary>
 		///	 Build the Xml and send it to the GVSServer
 		/// </summary>
-		public void display(){
+		public void Display(){
 			document = new XmlDocument();
-			XmlDeclaration dec = document.CreateXmlDeclaration("1.0",null,null);
+			var dec = document.CreateXmlDeclaration("1.0",null,null);
 			dec.Encoding=Encoding.UTF8.ToString();
 			document.AppendChild(dec);
-			XmlElement root = document.CreateElement(ROOT);
+			var root = document.CreateElement(ROOT);
 			document.AppendChild(root);
 			
-			XmlElement graph = document.CreateElement(GRAPH);
+			var graph = document.CreateElement(GRAPH);
 			root.AppendChild(graph);
 			graph.SetAttribute(ATTRIBUTEID,this.gvsGraphId.ToString());
 			
-			XmlElement graphLabel= document.CreateElement(LABEL);
+			var graphLabel= document.CreateElement(LABEL);
 			graph.AppendChild(graphLabel);
 			graphLabel.AppendChild(document.CreateTextNode( this.gvsGraphName));
 			
-			XmlElement graphBackground= document.CreateElement(BACKGROUND);
+			var graphBackground= document.CreateElement(BACKGROUND);
 			graph.AppendChild(graphBackground);
 			graphBackground.AppendChild(document.CreateTextNode(this.gvsGraphTyp.getBackground().ToString()));
 			
-			XmlElement maxLabelLength = document.CreateElement(MAXLABELLENGTH);
+			var maxLabelLength = document.CreateElement(MAXLABELLENGTH);
 			graph.AppendChild(maxLabelLength);
 			maxLabelLength.AppendChild(document.CreateTextNode(this.maxLabelLength.ToString()));
 
-			XmlElement vertizes = document.CreateElement(VERTIZES);
+			var vertizes = document.CreateElement(VERTIZES);
 			root.AppendChild(vertizes);
 
-			foreach(Object vertex in gvsGraphVertizes){
-				Type[] interfaces=vertex.GetType().GetInterfaces();
-				foreach(Type theInterface in interfaces){
+			foreach(var vertex in gvsGraphVertizes){
+				var interfaces=vertex.GetType().GetInterfaces();
+				foreach(var theInterface in interfaces){
 					if(theInterface.FullName==typeof(GVSRelativeVertex).FullName){
-						buildRelativVertex(vertizes,(GVSRelativeVertex)vertex);
+						BuildRelativVertex(vertizes,(GVSRelativeVertex)vertex);
 						break;	
 					}
 					else if(theInterface.FullName==typeof(GVSDefaultVertex).FullName){
-						buildDefaultVertex(vertizes,(GVSDefaultVertex)vertex); 
+						BuildDefaultVertex(vertizes,(GVSDefaultVertex)vertex); 
 					}
 				}
 			}
 
-			XmlElement edges = document.CreateElement(EDGES);
+			var edges = document.CreateElement(EDGES);
 			root.AppendChild(edges);
 
-			foreach(Object edge in gvsGraphEdges){
-				Type[] interfaces=edge.GetType().GetInterfaces();
-				foreach(Type theInterface in interfaces){
+			foreach(var edge in gvsGraphEdges){
+				var interfaces=edge.GetType().GetInterfaces();
+				foreach(var theInterface in interfaces){
 					if(theInterface.FullName==typeof(GVSDirectedEdge).FullName){
-						buildDirectedEdge(edges,(GVSDirectedEdge)edge);
+						BuildDirectedEdge(edges,(GVSDirectedEdge)edge);
 						break;	
 					}
 					else if(theInterface.FullName==typeof(GVSUndirectedEdge).FullName){
-						buildUndirectedEdge(edges,(GVSUndirectedEdge)edge);
+						BuildUndirectedEdge(edges,(GVSUndirectedEdge)edge);
 						break;
 					}
 				}
@@ -497,67 +474,60 @@ namespace gvs_lib_csharp.gvs.graph
 		}
 
 		//*************************************************XML_BUILDERS****************************
-		private void buildDefaultVertex(XmlElement pParent, GVSDefaultVertex pVertex){
-			XmlElement defaultVertex = document.CreateElement(DEFAULTVERTEX);
+		private void BuildDefaultVertex(XmlElement pParent, GVSDefaultVertex pVertex){
+			var defaultVertex = document.CreateElement(DEFAULTVERTEX);
 			pParent.AppendChild(defaultVertex);
 			defaultVertex.SetAttribute(ATTRIBUTEID,pVertex.GetHashCode().ToString());
 			var vertexTypNull=pVertex.getGVSVertexTyp();
 			if(vertexTypNull!=null){
 				if(pVertex.getGVSVertexTyp().GetType().FullName==typeof(GVSEllipseVertexTyp).FullName){
-					GVSEllipseVertexTyp vertexTyp=
+					var vertexTyp=
 						((GVSEllipseVertexTyp)(pVertex.getGVSVertexTyp()));
-					XmlElement label = document.CreateElement(LABEL);
+					var label = document.CreateElement(LABEL);
 					defaultVertex.AppendChild(label);
-					string vertexLabel=pVertex.getGVSVertexLabel();
-					if(vertexLabel==null){
-						vertexLabel="";
-					}
-					label.AppendChild(document.CreateTextNode(vertexLabel));
+					var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
 
-					XmlElement lineColor = document.CreateElement(LINECOLOR);
+                    label.AppendChild(document.CreateTextNode(vertexLabel));
+
+					var lineColor = document.CreateElement(LINECOLOR);
 					defaultVertex.AppendChild(lineColor);
 					lineColor.AppendChild(document.CreateTextNode(vertexTyp.getLineColor().ToString()));
 
-					XmlElement lineStyle = document.CreateElement(LINESTYLE);
+					var lineStyle = document.CreateElement(LINESTYLE);
 					defaultVertex.AppendChild(lineStyle);
 					lineStyle.AppendChild(document.CreateTextNode(vertexTyp.getLineStyle().ToString()));
 
 
-					XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+					var lineThick = document.CreateElement(LINETHICKNESS);
 					defaultVertex.AppendChild(lineThick);
 					lineThick.AppendChild(document.CreateTextNode(vertexTyp.getLineThickness().ToString()));
 
 
-					XmlElement fillColor = document.CreateElement(FILLCOLOR);
+					var fillColor = document.CreateElement(FILLCOLOR);
 					defaultVertex.AppendChild(fillColor);
 					fillColor.AppendChild(document.CreateTextNode(vertexTyp.getFillColor().ToString()));
 				}
 				else if(pVertex.getGVSVertexTyp().GetType().FullName==typeof(GVSIconVertexTyp).FullName){
-					GVSIconVertexTyp vertexTyp=
-						((GVSIconVertexTyp)(pVertex.getGVSVertexTyp()));
-					XmlElement label = document.CreateElement(LABEL);
+					var vertexTyp= ((GVSIconVertexTyp)(pVertex.getGVSVertexTyp()));
+					var label = document.CreateElement(LABEL);
 					defaultVertex.AppendChild(label);
-					string vertexLabel=pVertex.getGVSVertexLabel();
-					if(vertexLabel==null){
-						vertexLabel="";
-					}
+					var vertexLabel = pVertex.getGVSVertexLabel() ?? "";
+					
 					label.AppendChild(document.CreateTextNode(vertexLabel));
 				
-					XmlElement lineColor = document.CreateElement(LINECOLOR);
+					var lineColor = document.CreateElement(LINECOLOR);
 					defaultVertex.AppendChild(lineColor);
 					lineColor.AppendChild(document.CreateTextNode(vertexTyp.getLineColor().ToString()));
 
-					XmlElement lineStyle = document.CreateElement(LINESTYLE);
+					var lineStyle = document.CreateElement(LINESTYLE);
 					defaultVertex.AppendChild(lineStyle);
 					lineStyle.AppendChild(document.CreateTextNode(vertexTyp.getLineStyle().ToString()));
 
-
-					XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+					var lineThick = document.CreateElement(LINETHICKNESS);
 					defaultVertex.AppendChild(lineThick);
 					lineThick.AppendChild(document.CreateTextNode(vertexTyp.getLineThickness().ToString()));
 
-
-					XmlElement icon = document.CreateElement(ICON);
+					var icon = document.CreateElement(ICON);
 					defaultVertex.AppendChild(icon);
 					icon.AppendChild(document.CreateTextNode(vertexTyp.getIcon().ToString()));
 				}
@@ -566,161 +536,146 @@ namespace gvs_lib_csharp.gvs.graph
 				}
 			}
 			else{
-				XmlElement label = document.CreateElement(LABEL);
+				var label = document.CreateElement(LABEL);
 				defaultVertex.AppendChild(label);
-				string vertexLabel=pVertex.getGVSVertexLabel();
-				if(vertexLabel==null){
-					vertexLabel="";
-				}
+				var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+				
 				label.AppendChild(document.CreateTextNode(vertexLabel));
 				
-				XmlElement lineColor = document.CreateElement(LINECOLOR);
+				var lineColor = document.CreateElement(LINECOLOR);
 				defaultVertex.AppendChild(lineColor);
 				lineColor.AppendChild(document.CreateTextNode(STANDARD));
 
-				XmlElement lineStyle = document.CreateElement(LINESTYLE);
+				var lineStyle = document.CreateElement(LINESTYLE);
 				defaultVertex.AppendChild(lineStyle);
 				lineStyle.AppendChild(document.CreateTextNode(STANDARD));
 
-				XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+				var lineThick = document.CreateElement(LINETHICKNESS);
 				defaultVertex.AppendChild(lineThick);
 				lineThick.AppendChild(document.CreateTextNode(STANDARD));
 
-				XmlElement fillColor = document.CreateElement(FILLCOLOR);
+				var fillColor = document.CreateElement(FILLCOLOR);
 				defaultVertex.AppendChild(fillColor);
 				fillColor.AppendChild(document.CreateTextNode(STANDARD));
 			}
 		}
 		
-		private void buildRelativVertex(XmlElement pParent, GVSRelativeVertex pVertex){
-			XmlElement relativeVertex = document.CreateElement(RELATIVVERTEX);
+		private void BuildRelativVertex(XmlElement pParent, GVSRelativeVertex pVertex){
+			var relativeVertex = document.CreateElement(RELATIVVERTEX);
 			pParent.AppendChild(relativeVertex);
 			relativeVertex.SetAttribute(ATTRIBUTEID,pVertex.GetHashCode().ToString());
 			var vertexTypNull=pVertex.getGVSVertexTyp();
 			if(vertexTypNull!=null){
 				if(pVertex.getGVSVertexTyp().GetType().FullName==typeof(GVSEllipseVertexTyp).FullName){
-					GVSEllipseVertexTyp vertexTyp=
-						((GVSEllipseVertexTyp)(pVertex.getGVSVertexTyp()));
-					XmlElement label = document.CreateElement(LABEL);
+					var vertexTyp= ((GVSEllipseVertexTyp)(pVertex.getGVSVertexTyp()));
+					var label = document.CreateElement(LABEL);
 					relativeVertex.AppendChild(label);
-					string vertexLabel=pVertex.getGVSVertexLabel();
-					if(vertexLabel==null){
-						vertexLabel="";
-					}
+					var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+
 					label.AppendChild(document.CreateTextNode(vertexLabel));
 
-					XmlElement lineColor = document.CreateElement(LINECOLOR);
+					var lineColor = document.CreateElement(LINECOLOR);
 					relativeVertex.AppendChild(lineColor);
 					lineColor.AppendChild(document.CreateTextNode(vertexTyp.getLineColor().ToString()));
 
-					XmlElement lineStyle = document.CreateElement(LINESTYLE);
+					var lineStyle = document.CreateElement(LINESTYLE);
 					relativeVertex.AppendChild(lineStyle);
 					lineStyle.AppendChild(document.CreateTextNode(vertexTyp.getLineStyle().ToString()));
 
-
-					XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+					var lineThick = document.CreateElement(LINETHICKNESS);
 					relativeVertex.AppendChild(lineThick);
 					lineThick.AppendChild(document.CreateTextNode(vertexTyp.getLineThickness().ToString()));
 
-
-					XmlElement fillColor = document.CreateElement(FILLCOLOR);
+					var fillColor = document.CreateElement(FILLCOLOR);
 					relativeVertex.AppendChild(fillColor);
 					fillColor.AppendChild(document.CreateTextNode(vertexTyp.getFillColor().ToString()));
 
-					XmlElement xPos = document.CreateElement(XPOS);
+					var xPos = document.CreateElement(XPOS);
 					relativeVertex.AppendChild(xPos);
 					xPos.AppendChild(document.CreateTextNode(pVertex.getX().ToString()));
 
-					XmlElement yPos = document.CreateElement(YPOS);
+					var yPos = document.CreateElement(YPOS);
 					relativeVertex.AppendChild(yPos);
 					yPos.AppendChild(document.CreateTextNode(pVertex.getY().ToString()));
 				}
 				else if(pVertex.getGVSVertexTyp().GetType().FullName==typeof(GVSIconVertexTyp).FullName){
-					GVSIconVertexTyp vertexTyp=
-						((GVSIconVertexTyp)(pVertex.getGVSVertexTyp()));
-					XmlElement label = document.CreateElement(LABEL);
+					var vertexTyp= ((GVSIconVertexTyp)(pVertex.getGVSVertexTyp()));
+					var label = document.CreateElement(LABEL);
 					relativeVertex.AppendChild(label);
-					string vertexLabel=pVertex.getGVSVertexLabel();
-					if(vertexLabel==null){
-						vertexLabel="";
-					}
+					var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+
 					label.AppendChild(document.CreateTextNode(vertexLabel));
 
-					XmlElement lineColor = document.CreateElement(LINECOLOR);
+					var lineColor = document.CreateElement(LINECOLOR);
 					relativeVertex.AppendChild(lineColor);
 					lineColor.AppendChild(document.CreateTextNode(vertexTyp.getLineColor().ToString()));
 
-					XmlElement lineStyle = document.CreateElement(LINESTYLE);
+					var lineStyle = document.CreateElement(LINESTYLE);
 					relativeVertex.AppendChild(lineStyle);
 					lineStyle.AppendChild(document.CreateTextNode(vertexTyp.getLineStyle().ToString()));
 
-
-					XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+					var lineThick = document.CreateElement(LINETHICKNESS);
 					relativeVertex.AppendChild(lineThick);
 					lineThick.AppendChild(document.CreateTextNode(vertexTyp.getLineThickness().ToString()));
 
-
-					XmlElement icon = document.CreateElement(ICON);
+					var icon = document.CreateElement(ICON);
 					relativeVertex.AppendChild(icon);
 					icon.AppendChild(document.CreateTextNode(vertexTyp.getIcon().ToString()));
 
-					XmlElement xPos = document.CreateElement(XPOS);
+					var xPos = document.CreateElement(XPOS);
 					relativeVertex.AppendChild(xPos);
 					xPos.AppendChild(document.CreateTextNode(pVertex.getX().ToString()));
 
-					XmlElement yPos = document.CreateElement(YPOS);
+					var yPos = document.CreateElement(YPOS);
 					relativeVertex.AppendChild(yPos);
 					yPos.AppendChild(document.CreateTextNode(pVertex.getY().ToString()));
 				}
 				else{
 					Console.WriteLine("VertexTyp isn't a ellipse or icon");
-					
 				}
 			}
 			else{
-				XmlElement label = document.CreateElement(LABEL);
+				var label = document.CreateElement(LABEL);
 				relativeVertex.AppendChild(label);
-				string vertexLabel=pVertex.getGVSVertexLabel();
-				if(vertexLabel==null){
-					vertexLabel="";
-				}
+				var vertexLabel=pVertex.getGVSVertexLabel() ?? "";
+				
 				label.AppendChild(document.CreateTextNode(vertexLabel));
 
-				XmlElement lineColor = document.CreateElement(LINECOLOR);
+				var lineColor = document.CreateElement(LINECOLOR);
 				relativeVertex.AppendChild(lineColor);
 				lineColor.AppendChild(document.CreateTextNode(STANDARD));
 
-				XmlElement lineStyle = document.CreateElement(LINESTYLE);
+				var lineStyle = document.CreateElement(LINESTYLE);
 				relativeVertex.AppendChild(lineStyle);
 				lineStyle.AppendChild(document.CreateTextNode(STANDARD));
 
 
-				XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+				var lineThick = document.CreateElement(LINETHICKNESS);
 				relativeVertex.AppendChild(lineThick);
 				lineThick.AppendChild(document.CreateTextNode(STANDARD));
 
 
-				XmlElement fillColor = document.CreateElement(FILLCOLOR);
+				var fillColor = document.CreateElement(FILLCOLOR);
 				relativeVertex.AppendChild(fillColor);
 				fillColor.AppendChild(document.CreateTextNode(STANDARD));
 
-				XmlElement xPos = document.CreateElement(XPOS);
+				var xPos = document.CreateElement(XPOS);
 				relativeVertex.AppendChild(xPos);
 				xPos.AppendChild(document.CreateTextNode(pVertex.getX().ToString()));
 
-				XmlElement yPos = document.CreateElement(YPOS);
+				var yPos = document.CreateElement(YPOS);
 				relativeVertex.AppendChild(yPos);
 				yPos.AppendChild(document.CreateTextNode(pVertex.getY().ToString()));
 			}
 		}
 
-		private void buildDirectedEdge(XmlElement pParent, GVSDirectedEdge pEdge){
-			GVSDefaultVertex vertex1 = pEdge.getGVSStartVertex();
-			GVSDefaultVertex vertex2 = pEdge.getGVSEndVertex();
-			bool vertex1Exist=false;
-			bool vertex2Exist=false;
+		private void BuildDirectedEdge(XmlElement pParent, GVSDirectedEdge pEdge){
+			var vertex1 = pEdge.getGVSStartVertex();
+			var vertex2 = pEdge.getGVSEndVertex();
+			var vertex1Exist = false;
+			var vertex2Exist = false;
 		
-			foreach(GVSDefaultVertex vertex in gvsGraphVertizes){
+			foreach(var vertex in gvsGraphVertizes){
 				if(vertex==vertex1){
 					vertex1Exist=true;
 				}
@@ -731,70 +686,64 @@ namespace gvs_lib_csharp.gvs.graph
 		
 			if(vertex1Exist==true && vertex2Exist==true &&vertex1!=null && vertex2!=null){
 				var edgeTyp = pEdge.getGVSEdgeTyp();
-				XmlElement directedEdge = document.CreateElement(EDGE);
+				var directedEdge = document.CreateElement(EDGE);
 				pParent.AppendChild(directedEdge);
 				directedEdge.SetAttribute(ATTRIBUTEID,pEdge.GetHashCode().ToString());
 				directedEdge.SetAttribute(ISDIRECTED,"true");
 				if(edgeTyp!=null){
-					XmlElement label = document.CreateElement(LABEL);
+					var label = document.CreateElement(LABEL);
 					directedEdge.AppendChild(label);
-					string edgeLabel=pEdge.getGVSEdgeLabel();
-					if(edgeLabel==null){
-						edgeLabel="";
-					}
+					var edgeLabel=pEdge.getGVSEdgeLabel() ?? "";
+					
 					label.AppendChild(document.CreateTextNode(edgeLabel));
 
-					XmlElement lineColor = document.CreateElement(LINECOLOR);
+					var lineColor = document.CreateElement(LINECOLOR);
 					directedEdge.AppendChild(lineColor);
 					lineColor.AppendChild(document.CreateTextNode(edgeTyp.getLineColor().ToString()));
 
-					XmlElement lineStyle = document.CreateElement(LINESTYLE);
+					var lineStyle = document.CreateElement(LINESTYLE);
 					directedEdge.AppendChild(lineStyle);
 					lineStyle.AppendChild(document.CreateTextNode(edgeTyp.getLineStyle().ToString()));
 
 
-					XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+					var lineThick = document.CreateElement(LINETHICKNESS);
 					directedEdge.AppendChild(lineThick);
 					lineThick.AppendChild(document.CreateTextNode(edgeTyp.getLineThickness().ToString()));
 
 
-					XmlElement fromVertex = document.CreateElement(FROMVERTEX);
+					var fromVertex = document.CreateElement(FROMVERTEX);
 					directedEdge.AppendChild(fromVertex);
 					fromVertex.AppendChild(document.CreateTextNode(pEdge.getGVSStartVertex().GetHashCode().ToString()));
 					
-					XmlElement toVertex = document.CreateElement(TOVERTEX);
+					var toVertex = document.CreateElement(TOVERTEX);
 					directedEdge.AppendChild(toVertex);
 					toVertex.AppendChild(document.CreateTextNode(pEdge.getGVSEndVertex().GetHashCode().ToString()));
 				}
 
 				else{
-					XmlElement label = document.CreateElement(LABEL);
+					var label = document.CreateElement(LABEL);
 					directedEdge.AppendChild(label);
-					string edgeLabel=pEdge.getGVSEdgeLabel();
-					if(edgeLabel==null){
-						edgeLabel="";
-					}
+					var edgeLabel=pEdge.getGVSEdgeLabel() ?? "";
+					
 					label.AppendChild(document.CreateTextNode(edgeLabel));
 
-					XmlElement lineColor = document.CreateElement(LINECOLOR);
+					var lineColor = document.CreateElement(LINECOLOR);
 					directedEdge.AppendChild(lineColor);
 					lineColor.AppendChild(document.CreateTextNode(STANDARD));
 
-					XmlElement lineStyle = document.CreateElement(LINESTYLE);
+					var lineStyle = document.CreateElement(LINESTYLE);
 					directedEdge.AppendChild(lineStyle);
 					lineStyle.AppendChild(document.CreateTextNode(STANDARD));
 
-
-					XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+					var lineThick = document.CreateElement(LINETHICKNESS);
 					directedEdge.AppendChild(lineThick);
 					lineThick.AppendChild(document.CreateTextNode(STANDARD));
 					
-					
-					XmlElement fromVertex = document.CreateElement(FROMVERTEX);
+					var fromVertex = document.CreateElement(FROMVERTEX);
 					directedEdge.AppendChild(fromVertex);
 					fromVertex.AppendChild(document.CreateTextNode(pEdge.getGVSStartVertex().GetHashCode().ToString()));
 					
-					XmlElement toVertex = document.CreateElement(TOVERTEX);
+					var toVertex = document.CreateElement(TOVERTEX);
 					directedEdge.AppendChild(toVertex);
 					toVertex.AppendChild(document.CreateTextNode(pEdge.getGVSEndVertex().GetHashCode().ToString()));				}
 			}
@@ -803,14 +752,14 @@ namespace gvs_lib_csharp.gvs.graph
 			}
 		}
 
-		private void buildUndirectedEdge(XmlElement pParent, GVSUndirectedEdge pEdge){
+		private void BuildUndirectedEdge(XmlElement pParent, GVSUndirectedEdge pEdge){
 			if(pEdge.getGVSVertizes()!=null){
 				var vertex1 = pEdge.getGVSVertizes()[0];
 				var vertex2 = pEdge.getGVSVertizes()[1];
-				bool vertex1Exist=false;
-				bool vertex2Exist=false;
+				var vertex1Exist=false;
+				var vertex2Exist=false;
 			
-				foreach(GVSDefaultVertex vertex in gvsGraphVertizes){
+				foreach(var vertex in gvsGraphVertizes){
 					if(vertex==vertex1){
 						vertex1Exist=true;
 					}
@@ -820,70 +769,66 @@ namespace gvs_lib_csharp.gvs.graph
 				}
 
 				if(vertex1Exist==true && vertex2Exist==true &&vertex1!=null &&vertex2!=null){
-					GVSEdgeTyp edgeTyp = pEdge.getGVSEdgeTyp();
-					XmlElement undirectedEdge = document.CreateElement(EDGE);
+					var edgeTyp = pEdge.getGVSEdgeTyp();
+					var undirectedEdge = document.CreateElement(EDGE);
 					pParent.AppendChild(undirectedEdge);
 					undirectedEdge.SetAttribute(ATTRIBUTEID,pEdge.GetHashCode().ToString());
-					int arrowPos=pEdge.hasArrow();
+					var arrowPos=pEdge.hasArrow();
 					undirectedEdge.SetAttribute(ISDIRECTED,"false");
 					undirectedEdge.SetAttribute(ARROWPOS,arrowPos.ToString());
 					if(edgeTyp!=null){
-						XmlElement label = document.CreateElement(LABEL);
+						var label = document.CreateElement(LABEL);
 						undirectedEdge.AppendChild(label);
-						string edgeLabel=pEdge.getGVSEdgeLabel();
-						if(edgeLabel==null){
-							edgeLabel="";
-						}
+						var edgeLabel=pEdge.getGVSEdgeLabel() ?? "";
+
 						label.AppendChild(document.CreateTextNode(edgeLabel));
 
-						XmlElement lineColor = document.CreateElement(LINECOLOR);
+						var lineColor = document.CreateElement(LINECOLOR);
 						undirectedEdge.AppendChild(lineColor);
 						lineColor.AppendChild(document.CreateTextNode(STANDARD));
 
-						XmlElement lineStyle = document.CreateElement(LINESTYLE);
+						var lineStyle = document.CreateElement(LINESTYLE);
 						undirectedEdge.AppendChild(lineStyle);
 						lineStyle.AppendChild(document.CreateTextNode(STANDARD));
 
 
-						XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+						var lineThick = document.CreateElement(LINETHICKNESS);
 						undirectedEdge.AppendChild(lineThick);
 						lineThick.AppendChild(document.CreateTextNode(STANDARD));
 						
 						
-						XmlElement fromVertex = document.CreateElement(FROMVERTEX);
+						var fromVertex = document.CreateElement(FROMVERTEX);
 						undirectedEdge.AppendChild(fromVertex);
 						fromVertex.AppendChild(document.CreateTextNode(pEdge.getGVSVertizes()[0].GetHashCode().ToString()));
 						
-						XmlElement toVertex = document.CreateElement(TOVERTEX);
+						var toVertex = document.CreateElement(TOVERTEX);
 						undirectedEdge.AppendChild(toVertex);
 						toVertex.AppendChild(document.CreateTextNode(pEdge.getGVSVertizes()[1].GetHashCode().ToString()));
 					}
 					else{
-						XmlElement label = document.CreateElement(LABEL);
+						var label = document.CreateElement(LABEL);
 						undirectedEdge.AppendChild(label);
-						string edgeLabel=pEdge.getGVSEdgeLabel();
-						if(edgeLabel==null){
-							edgeLabel="";
-						}
+						var edgeLabel=pEdge.getGVSEdgeLabel() ?? "";
+
 						label.AppendChild(document.CreateTextNode(edgeLabel));
 
-						XmlElement lineColor = document.CreateElement(LINECOLOR);
+						var lineColor = document.CreateElement(LINECOLOR);
 						undirectedEdge.AppendChild(lineColor);
 						lineColor.AppendChild(document.CreateTextNode(STANDARD));
 
-						XmlElement lineStyle = document.CreateElement(LINESTYLE);
+						var lineStyle = document.CreateElement(LINESTYLE);
 						undirectedEdge.AppendChild(lineStyle);
 						lineStyle.AppendChild(document.CreateTextNode(STANDARD));
 
-						XmlElement lineThick = document.CreateElement(LINETHICKNESS);
+						var lineThick = document.CreateElement(LINETHICKNESS);
 						undirectedEdge.AppendChild(lineThick);
 						lineThick.AppendChild(document.CreateTextNode(STANDARD));
 						
-						XmlElement fromVertex = document.CreateElement(FROMVERTEX);
+						var fromVertex = document.CreateElement(FROMVERTEX);
 						undirectedEdge.AppendChild(fromVertex);
 						fromVertex.AppendChild(document.CreateTextNode(pEdge.getGVSVertizes()[0].GetHashCode().ToString()));
 						
-						XmlElement toVertex = document.CreateElement(TOVERTEX);
+						var toVertex = document.CreateElement(TOVERTEX);
 						undirectedEdge.AppendChild(toVertex);
 						toVertex.AppendChild(document.CreateTextNode(pEdge.getGVSVertizes()[1].GetHashCode().ToString()));
 					}
@@ -897,12 +842,12 @@ namespace gvs_lib_csharp.gvs.graph
 			}
 		}
 
-		public void disconnect(){
+		public void Disconnect(){
 			xmlConnection.disconnectFromServer();
 		}
 
 		~GVSGraph() {
-			this.disconnect();
+			this.Disconnect();
 		}
 
 	}
