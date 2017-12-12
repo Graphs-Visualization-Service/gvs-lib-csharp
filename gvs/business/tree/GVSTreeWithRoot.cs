@@ -3,11 +3,11 @@ using System.Xml;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-using gvs_lib_csharp.gvs.connection;
-using gvs_lib_csharp.gvs.styles;
+using gvs_lib_csharp.business.styles.access;
+using gvs_lib_csharp.gvs.business.styles;
 using static System.Configuration.ConfigurationSettings;
 
-namespace gvs_lib_csharp.gvs.tree
+namespace gvs_lib_csharp.gvs.business.tree
 {
 	/// <summary>
 	/// This class takes up only a rootnode. For transfer, the class build the tree

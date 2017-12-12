@@ -4,10 +4,10 @@ using System.Collections;
 using System.Xml;
 using System.Configuration;
 using System.Collections.Generic;
-using gvs_lib_csharp.gvs.connection;
-using gvs_lib_csharp.gvs.styles;
+using gvs_lib_csharp.business.styles.access;
+using gvs_lib_csharp.gvs.business.styles;
 
-namespace gvs_lib_csharp.gvs.graph
+namespace gvs_lib_csharp.gvs.business.graph
 {
 	/// <summary>
 	/// This class represents the graph. Null values are translated on standard or 

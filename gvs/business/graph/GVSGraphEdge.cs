@@ -1,7 +1,7 @@
 using System;
-using gvs_lib_csharp.gvs.styles;
+using gvs_lib_csharp.gvs.business.styles;
 
-namespace gvs_lib_csharp.gvs.graph
+namespace gvs_lib_csharp.gvs.business.graph
 {
 	/// <summary>
 	/// Super class for Edges. Do not use

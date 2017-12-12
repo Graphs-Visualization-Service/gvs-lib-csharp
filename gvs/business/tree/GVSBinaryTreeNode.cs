@@ -1,6 +1,6 @@
 using System;
 
-namespace gvs_lib_csharp.gvs.tree
+namespace gvs_lib_csharp.gvs.business.tree
 {
 	/// <summary>
 	/// Summary description for GVSBinaryTreeNode.

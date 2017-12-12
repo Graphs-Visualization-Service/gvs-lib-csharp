@@ -45,23 +45,23 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gvs\connection\XMLConnection.cs" />
-    <Compile Include="gvs\graph\GVSDefaultVertex.cs" />
-    <Compile Include="gvs\graph\GVSDirectedEdge.cs" />
-    <Compile Include="gvs\graph\GVSGraph.cs" />
-    <Compile Include="gvs\graph\GVSGraphEdge.cs" />
-    <Compile Include="gvs\graph\GVSRelativeVertex.cs" />
-    <Compile Include="gvs\graph\GVSUndirectedEdge.cs" />
-    <Compile Include="gvs\styles\GVSColor.cs" />
-    <Compile Include="gvs\styles\GVSIcon.cs" />
-    <Compile Include="gvs\styles\GVSLineStyle.cs" />
-    <Compile Include="gvs\styles\GVSLineThickness.cs" />
-    <Compile Include="gvs\styles\GVSStyle.cs" />
-    <Compile Include="gvs\tree\GVSBinaryTreeNode.cs" />
-    <Compile Include="gvs\tree\GVSDefaultTreeNode.cs" />
-    <Compile Include="gvs\tree\GVSTreeNode.cs" />
-    <Compile Include="gvs\tree\GVSTreeWithCollection.cs" />
-    <Compile Include="gvs\tree\GVSTreeWithRoot.cs" />
+    <Compile Include="gvs\access\XMLConnection.cs" />
+    <Compile Include="gvs\business\graph\GVSDefaultVertex.cs" />
+    <Compile Include="gvs\business\graph\GVSDirectedEdge.cs" />
+    <Compile Include="gvs\business\graph\GVSGraph.cs" />
+    <Compile Include="gvs\business\graph\GVSGraphEdge.cs" />
+    <Compile Include="gvs\business\graph\GVSRelativeVertex.cs" />
+    <Compile Include="gvs\business\graph\GVSUndirectedEdge.cs" />
+    <Compile Include="gvs\business\styles\GVSColor.cs" />
+    <Compile Include="gvs\business\styles\GVSIcon.cs" />
+    <Compile Include="gvs\business\styles\GVSLineStyle.cs" />
+    <Compile Include="gvs\business\styles\GVSLineThickness.cs" />
+    <Compile Include="gvs\business\styles\GVSStyle.cs" />
+    <Compile Include="gvs\business\tree\GVSBinaryTreeNode.cs" />
+    <Compile Include="gvs\business\tree\GVSDefaultTreeNode.cs" />
+    <Compile Include="gvs\business\tree\GVSTreeNode.cs" />
+    <Compile Include="gvs\business\tree\GVSTreeWithCollection.cs" />
+    <Compile Include="gvs\business\tree\GVSTreeWithRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

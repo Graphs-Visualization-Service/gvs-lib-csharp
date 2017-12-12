@@ -4,10 +4,10 @@ using System.Configuration;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
-using gvs_lib_csharp.gvs.connection;
-using gvs_lib_csharp.gvs.styles;
+using gvs_lib_csharp.business.styles.access;
+using gvs_lib_csharp.gvs.business.styles;
 
-namespace gvs_lib_csharp.gvs.tree
+namespace gvs_lib_csharp.gvs.business.tree
 {
 	/// <summary>
 	/// This class takes up those nodes to a Collection and transfers it to 

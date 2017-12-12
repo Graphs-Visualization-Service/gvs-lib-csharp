@@ -1,6 +1,5 @@
-using System;
 
-namespace gvs_lib_csharp.gvs.graph
+namespace gvs_lib_csharp.gvs.business.graph
 {
 	/// <summary>
 	/// Represents a DirectedEdge. Start and end must be set. The Arrow

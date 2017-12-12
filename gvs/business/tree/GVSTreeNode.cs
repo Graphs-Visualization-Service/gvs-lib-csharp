@@ -1,7 +1,7 @@
 using System;
-using gvs_lib_csharp.gvs.styles;
+using gvs_lib_csharp.gvs.business.styles;
 
-namespace gvs_lib_csharp.gvs.tree
+namespace gvs_lib_csharp.gvs.business.tree
 {
 	/// <summary>
 	/// Superclass for nodes. Do not use
